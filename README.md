@@ -1,2 +1,2 @@
-# InstructATSC
-Instructional learning for Aspect Term Sentiment Classification
+# InstructABSA
+Instructional learning for Aspect Based Sentiment Classification

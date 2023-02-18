@@ -1,4 +1,10 @@
 .DS_Store
 *.pyc
-.xlsx
 .png
+
+Paper
+Models
+semeval14
+introfigure.pptx
+create_data.ipynb
+InstructABSA Experiments.xlsx

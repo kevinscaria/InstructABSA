@@ -21,7 +21,7 @@ python run_model.py
 
 To run the same using the InstructABSA module, the steps are described below:
 ```python
-from InstructABSA.data_prep import DataLoader
+from InstructABSA.utils import T5Generator
 ```
 
 ## Aspect Term Sentiment Classification
@@ -34,7 +34,7 @@ python run_model.py
 
 To run the same using the InstructABSA module, the steps are described below:
 ```python
-from InstructABSA.data_prep import DataLoader
+from InstructABSA.utils import T5Classifier
 ```
 
 ## Joint Tasks
@@ -47,6 +47,6 @@ python run_model.py
 
 To run the same using the InstructABSA module, the steps are described below:
 ```python
-from InstructABSA.data_prep import DataLoader
+from InstructABSA.utils import T5Generator
 ```
 

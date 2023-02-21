@@ -3,7 +3,9 @@
 This repository is the official implementation of the [paper](https://arxiv.org/abs/2302.08624). As part of our approach we show the efficacy of instruction tuned language models. This approach surpasses previous SOTA on downstream ABSA subtasks by significant margin.
 
 ## Dataset Requirements
-This section describes the format of the data required for the training and evaluation of the datasets using our approach.
+This section describes the format of the data required for the training and evaluation of the datasets using our approach. For all subtasks, the field name should match exactly as shown and have the same datatypes. The fields to be present in the raw dataset are as follows:
+-- raw_text: This is the reviews section (str)
+-- aspectTerms: This is the set of aspect terms and their polarities ([{'term':'asoect1', 'polarity':'polarity'}...]
 
 ## Aspect Term Extraction
 

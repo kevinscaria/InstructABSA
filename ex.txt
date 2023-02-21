@@ -1,6 +1,4 @@
 ############ ATE ############
-
-
 python run_model.py -mode cli -model_checkpoint allenai/tk-instruct-base-def-pos \
 -experiment_name laptops_instruct_temp -task ate -output_dir ./Models \
 -id_tr_data_path ./semeval14/ABSA_TrainData/Restaurants_Train_v2.csv \
@@ -12,4 +10,16 @@ python run_model.py -mode cli -model_checkpoint allenai/tk-instruct-base-def-pos
 
 python run_model.py -mode cli -task ate \
 -model_checkpoint Models/ATE/allenai/tk-instruct-base-def-pos-combined100_instruct_pos_neg_neut/checkpoints \
+-test_input 'The cab ride was amazing but the service was pricey'
+
+
+############ ATE ############
+python run_model.py -mode cli -task atsc \
+-model_checkpoint Models/ATSC/allenai/tk-instruct-base-def-pos-combined100_instruct_pos_neg_neut/checkpoints \
+-test_input 'The cab ride was amazing but the service was pricey|cab ride'
+
+
+############ JointTask ############
+python run_model.py -mode cli -task joint \
+-model_checkpoint Models/JointTask/allenai/tk-instruct-base-def-pos-combined100_instruct_pos_neg_neut/checkpoints \
 -test_input 'The cab ride was amazing but the service was pricey'

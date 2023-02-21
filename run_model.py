@@ -195,7 +195,11 @@ if config.mode != 'cli':
             print('F1-Score: ', precision)
 else:
     print('Model loaded from: ', model_checkpoint)
-    model_input = bos_instruction_id + config.test_input + eos_instruction
+    if config.task == 'atsc':
+        config.test_input, aspect_term = config.test_input.split('|')[0], config.test_input.split('|')[1]
+        model_input = bos_instruction_id + config.test_input + f'. The aspect term is: {aspect_term}' + eos_instruction
+    else:
+        model_input = bos_instruction_id + config.test_input + eos_instruction
     input_ids = t5_exp.tokenizer(model_input, return_tensors="pt").input_ids
     outputs = t5_exp.model.generate(input_ids)
     print('Model output: ', t5_exp.tokenizer.decode(outputs[0], skip_special_tokens=True))

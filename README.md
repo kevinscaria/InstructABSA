@@ -4,8 +4,8 @@ This repository is the official implementation of the [paper](https://arxiv.org/
 
 ## Dataset Requirements
 This section describes the format of the data required for the training and evaluation of the datasets using our approach. For all subtasks, the field name should match exactly as shown and have the same datatypes. The fields to be present in the raw dataset are as follows:
--- raw_text: This is the reviews section (str)
--- aspectTerms: This is the set of aspect terms and their polarities ([{'term':'asoect1', 'polarity':'polarity'}...]
+```-- raw_text: This is the reviews section (str)```
+```-- aspectTerms: This is the set of aspect terms and their polarities ([{'term':'asoect1', 'polarity':'polarity'}...]```
 
 ## Aspect Term Extraction
 

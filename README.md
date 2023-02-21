@@ -2,15 +2,6 @@
 
 This repository is the official implementation of the [paper](https://arxiv.org/abs/2302.08624). As part of our approach we show the efficacy of instruction tuned language models. This approach surpasses previous SOTA on downstream ABSA subtasks by significant margin.
 
-This Tk-Instruct model is further insturction-tuned on downstream tasks of ABSA as follows:
-
-For Aspect Term Extraction (ATE) subtask: $$A_i = LM_{Inst}(Inst,S_i)$$
-
-For Aspect Term Sentiment Classification (ATSC) subtask: $$sp_i^k = LM_{Inst}(Inst,S_i, a_i^k)$$
-
-And to model Joint Task: $$[A_i, SP_i] = LM_{Inst}(Inst,S_i)$$
-
-
 ## Aspect Term Extraction
 
 The ATE models can be trained from scratch or alternatively can be used to run inference on your datasets directly. There are two ways this can be done. The first one is through the CLI commands which is shown below:

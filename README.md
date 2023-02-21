@@ -1,6 +1,6 @@
 # InstructABSA: Instruction learning for Aspect Based Sentiment Classification
 
-This repository is the official implementation of the [paper](https://arxiv.org/abs/2302.08624). As part of our approach we show the efficacy of instruction tuned language models. This approach surpasses previous SOTA by significant margin.
+This repository is the official implementation of the [paper](https://arxiv.org/abs/2302.08624). As part of our approach we show the efficacy of instruction tuned language models. This approach surpasses previous SOTA on downstream ABSA subtasks by significant margin.
 
 This Tk-Instruct model is further insturction-tuned on downstream tasks of ABSA as follows:
 

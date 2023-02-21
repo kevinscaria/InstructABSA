@@ -2,8 +2,11 @@
 Instructional learning for Aspect Based Sentiment Classification.
 
 This Tk-Instruct model is further insturction-tuned on downstream tasks of ABSA as follows:
+
 For Aspect Term Extraction subtask: 
+
 `$A_i = LM_{Inst}(Inst,S_i)$.`
+
 ATSC subtask: $sp_i^k = LM_{Inst}(Inst,S_i, a_i^k)$
 Joint Task: $[A_i, SP_i] = LM_{Inst}(Inst,S_i)$
 

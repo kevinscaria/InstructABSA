@@ -7,7 +7,7 @@ This section describes the format of the data required for the training and eval
 
 -- raw_text: This is the reviews section (str)
 
--- aspectTerms: This is the set of aspect terms and their polarities (```[{'term':'asoect1', 'polarity':'polarity'}...]```)
+-- aspectTerms: This is the set of aspect terms and their polarities (```[{'term':'aspect1', 'polarity':'polarity1'}, ...]```)
 
 ## Aspect Term Extraction
 

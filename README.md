@@ -22,8 +22,11 @@ An example dataset is shown below:
 
 The ATE models can be trained from scratch or alternatively can be used to run inference on your datasets directly. There are two ways this can be done. The first one is through the CLI commands which is shown below:
 
+To evaluate the ATE subtask on a single input using CLI run the following:
 ```shell
-python run_model.py
+python run_model.py -mode cli -task ate \
+-model_checkpoint Models/ATE/allenai/tk-instruct-base-def-pos-combined100_instruct_pos_neg_neut/checkpoints \
+-test_input 'The cab ride was amazing but the service was pricey'
 ```
 
 To run the same using the InstructABSA module, the steps are described below:

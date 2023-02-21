@@ -9,6 +9,12 @@ This section describes the format of the data required for the training and eval
 
 -- ```aspectTerms```: This is the set of aspect terms and their polarities to be present as a list of dictionaries. Each dictionary will have atleast two keys with the one of the key ```term``` and the value which is an aspect in the corresponding sentence. The second key will be ```polarity``` and its value is the polarity for corresponding aspect. (```[{'term':'aspect1', 'polarity':'polarity1'}, ...]```)
 
+An example dataset is shown below:
+| raw_text  | aspectTerms |
+| ------------- | ------------- |
+| The cab ride was amazing but the service was pricey  | [{'term':'cab ride', 'polarity':'positive'}, {'term':'service', 'polarity':'negative'}]  |
+| I ordered the Barbeque Pizza | []  |
+
 ## Aspect Term Extraction
 
 The ATE models can be trained from scratch or alternatively can be used to run inference on your datasets directly. There are two ways this can be done. The first one is through the CLI commands which is shown below:

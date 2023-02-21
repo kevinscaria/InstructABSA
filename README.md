@@ -1,5 +1,4 @@
-# InstructABSA
-Instructional learning for Aspect Based Sentiment Classification.
+# InstructABSA: Instructional learning for Aspect Based Sentiment Classificatio
 
 This Tk-Instruct model is further insturction-tuned on downstream tasks of ABSA as follows:
 

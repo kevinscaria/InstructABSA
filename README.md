@@ -10,7 +10,7 @@ This section describes the format of the data required for the training and eval
 -- ```aspectTerms```: This is the set of aspect terms and their polarities to be present as a list of dictionaries. Each dictionary will have atleast two keys with the one of the key ```term``` and the value which is an aspect in the corresponding sentence. The second key will be ```polarity``` and its value is the polarity for corresponding aspect. (```[{'term':'aspect1', 'polarity':'polarity1'}, ...]```)
 
 >**Warning**
->When creating the dataset in this fashion and saving it, .xlsx/.csv format will convert the aspectTerms column into ```string/text``` format. But the package will handle that when loading the dataset file. 
+>When creating the dataset in this fashion and saving it, ```.xlsx/.csv``` format will convert the aspectTerms column into ```string/text``` format. But the package will handle that when loading the dataset file. 
 
 An example dataset is shown below:
 | raw_text  | aspectTerms |

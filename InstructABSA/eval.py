@@ -4,10 +4,10 @@ warnings.filterwarnings('ignore')
 import pandas as pd
 
 import torch
-from InstructABSA.data_prep import DatasetLoader
-from InstructABSA.utils import T5Generator, T5Classifier
+from .data_prep import DatasetLoader
+from .utils import T5Generator, T5Classifier
 
-from InstructABSA.config import Config
+from .config import Config
 
 try:
     use_mps = True if torch.has_mps else False
@@ -180,14 +180,9 @@ model_trainer = t5_exp.train(id_tokenized_ds, **training_args)
 # Model inference
 print('Getting model from path: ', model_out_path)
 
-# Get prediction labels - Training set
 id_tr_pred_labels = t5_exp.get_labels(predictor = model_trainer, tokenized_dataset = id_tokenized_ds, sample_set = 'train')
-
-# Get prediction labels - Testing set
 id_te_pred_labels = t5_exp.get_labels(predictor = model_trainer, tokenized_dataset = id_tokenized_ds, sample_set = 'test')
 
 if ood_tokenzed_ds is not None:
     ood_tr_pred_labels = t5_exp.get_labels(predictor = model_trainer, tokenized_dataset = ood_tokenzed_ds, sample_set = 'train')
-
-    # Get prediction labels - Testing set
     ood_te_pred_labels = t5_exp.get_labels(predictor = model_trainer, tokenized_dataset = ood_tokenzed_ds, sample_set = 'test')

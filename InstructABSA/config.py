@@ -6,16 +6,17 @@ class Config(object):
         """
         Defaults
         """
+        self.mode = None
         self.model_checkpoint = None
         self.experiment_name = None
         self.task = None
         self.output_dir = None
         self.id_tr_data_path = None
         self.id_te_data_path = None
+        self.set_instruction_key = None
         self.ood_tr_data_path = None
         self.ood_te_data_path = None
-        self.tr_data_path = None
-        self.te_data_path = None
+        self.output_path = None
         self.sample_size = 1
         self.evaluation_strategy = None
         self.learning_rate = 5e-5
@@ -32,9 +33,9 @@ class Config(object):
         self.bos_instruction = None
         self.delim_instruction = None
         self.eos_instruction = None
+        self.test_input = None
         self.parser = self.setup_parser()
-        self.args = vars(self.parser.parse_args())
-        # print('ARGS: ', self.args)
+        self.args = vars(self.parser.parse_args()) 
         self.__dict__.update(self.args)
 
     def setup_parser(self):
@@ -43,16 +44,17 @@ class Config(object):
         :return:
         """
         parser = ArgumentParser(description='training code')
+        parser.add_argument('-mode', help='train/eval/cli', type=str, required=True)
         parser.add_argument('-model_checkpoint', help='Huggingface Model Path', type=str, required=True)
-        parser.add_argument('-experiment_name', help='Name of experiment', type=str, required=True)
-        parser.add_argument('-task', help='ate/atsc/joint', type=str, required=True)
+        parser.add_argument('-experiment_name', help='Name of experiment', type=str)
+        parser.add_argument('-task', help='ate/atsc/joint', type=str)
         parser.add_argument('-output_dir', type=str)
         parser.add_argument('-id_tr_data_path', type=str)
         parser.add_argument('-id_te_data_path', type=str)
+        parser.add_argument('-set_instruction_key', type=bool, default=True)
         parser.add_argument('-ood_tr_data_path', type=str)
         parser.add_argument('-ood_te_data_path', type=str)
-        parser.add_argument('-tr_data_path', type=str)
-        parser.add_argument('-te_data_path', type=str)
+        parser.add_argument('-output_path', type=str)
         parser.add_argument('-sample_size', help='For sampling fraction of train data', default=1.0, type=float)
         parser.add_argument('-evaluation_strategy', help='no/epoch/steps', default='epoch', type=str)
         parser.add_argument('-learning_rate', help='learning rate', default=5e-5, type=float)
@@ -62,6 +64,6 @@ class Config(object):
         parser.add_argument('-weight_decay', help='Weight decay', default=0.01, type=float)
         parser.add_argument('-warmup_ratio', help='Warmup Ratio', default=0.1, type=float)
         parser.add_argument('-save_strategy', help='no/epoch/steps', default='no', type=str)
-        parser.add_argument('-eval_accumulation_steps', help='Eval gradient accumulation steps', 
-                            default=1, type=int)
+        parser.add_argument('-eval_accumulation_steps', help='Eval gradient accumulation steps', default=1, type=int)
+        parser.add_argument('-test_input', help='The input review to test', type=str)
         return parser

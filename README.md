@@ -38,11 +38,13 @@ from InstructABSA.utils import T5Generator
 
 The ATE models can be trained from scratch or alternatively can be used to run inference on your datasets directly. There are two ways this can be done. The first one is through the CLI commands which is shown below:
 
+To evaluate the ATSC subtask on a single input using CLI run the following:
 ```shell
 python run_model.py -mode cli -task atsc \
 -model_checkpoint Models/ATSC/allenai/tk-instruct-base-def-pos-combined100_instruct_pos_neg_neut/checkpoints \
 -test_input 'The cab ride was amazing but the service was pricey|cab ride'
 ```
+Note the ```|``` delimiter that is used to pass the aspect term for which the polarity is to be extracted.
 
 To run the same using the InstructABSA module, the steps are described below:
 ```python
@@ -53,6 +55,7 @@ from InstructABSA.utils import T5Classifier
 
 The ATE models can be trained from scratch or alternatively can be used to run inference on your datasets directly. There are two ways this can be done. The first one is through the CLI commands which is shown below:
 
+To evaluate the Joint Task on a single input using CLI run the following:
 ```shell
 python run_model.py -mode cli -task joint \
 -model_checkpoint Models/JointTask/allenai/tk-instruct-base-def-pos-combined100_instruct_pos_neg_neut/checkpoints \

@@ -20,6 +20,12 @@ An example dataset is shown below:
 | The cab ride was amazing but the service was pricey  | [{'term':'cab ride', 'polarity':'positive'}, {'term':'service', 'polarity':'negative'}]  |
 | I ordered the Barbeque Pizza | []  |
 
+## Model Checkpoints
+| Task  | Model Name | Remarks |
+| ------------- | ------------- | ------------- |
+| ATE| - | - |
+| ATSC| - | - |
+
 ## Aspect Term Extraction
 
 The ATE models can be trained from scratch or alternatively can be used to run inference on your datasets directly. There are two ways this can be done. The first one is through the CLI commands which is shown below:

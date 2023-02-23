@@ -12,7 +12,10 @@ class DatasetLoader:
         # if 'restaurants' in experiment_name:
         self.train_df_id = train_df_id.sample(frac = sample_size, random_state = 1999)
         self.test_df_id = test_df_id
-        self.train_df_ood = train_df_ood.sample(frac = sample_size, random_state = 1999)
+        if train_df_ood is not None:
+            self.train_df_ood = train_df_ood.sample(frac = sample_size, random_state = 1999)
+        else:
+            self.train_df_ood = train_df_ood
         self.test_df_ood = test_df_ood
             # self.train_df = None
             # self.test_df = None
@@ -113,9 +116,9 @@ class DatasetLoader:
                 for idx, pair in enumerate(text):
                     if idx%2==0:
                         reconstructed_dict = {}
-                        reconstructed_dict[pair.split(': ')[0].replace("'", '')] = pair.split(': ')[1].replace("'", '')
+                        reconstructed_dict[pair.split(':')[0].replace("'", '')] = pair.split(':')[1].replace("'", '')
                     else:
-                        reconstructed_dict[pair.split(': ')[0].replace("'", '')] = pair.split(': ')[1].replace("'", '')
+                        reconstructed_dict[pair.split(':')[0].replace("'", '')] = pair.split(':')[1].replace("'", '')
                         req_list.append(reconstructed_dict)
             else:
                 req_list = text

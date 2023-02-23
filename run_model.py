@@ -23,7 +23,7 @@ if config.experiment_name is not None:
     print('Experiment Name: ', config.experiment_name)
     model_checkpoint = config.model_checkpoint
     model_out_path = config.output_dir
-    model_out_path = os.path.join(model_out_path, f"{model_checkpoint}-{config.experiment_name}", "checkpoints")
+    model_out_path = os.path.join(model_out_path, config.task, f"{model_checkpoint}-{config.experiment_name}")
 else:
     model_checkpoint = config.model_checkpoint
 
@@ -39,6 +39,7 @@ ood_te_data_path = config.ood_te_data_path
 if config.mode != 'cli':
     id_tr_df = pd.read_csv(id_tr_data_path)
     id_te_df = pd.read_csv(id_te_data_path)
+    ood_tr_df,  ood_te_df = None, None
 
     if ood_tr_data_path is not None:
         ood_tr_df = pd.read_csv(ood_tr_data_path)
@@ -50,7 +51,7 @@ else:
 
 # Training arguments
 training_args = {
-                'output_dir': config.output_dir,
+                'output_dir': model_out_path,
                 'evaluation_strategy': config.evaluation_strategy,
                 'learning_rate': config.learning_rate,
                 'per_device_train_batch_size': config.per_device_train_batch_size,
@@ -97,48 +98,35 @@ if config.task == 'joint':
 if config.mode != 'cli':
     # Define function to load datasets and tokenize datasets
     loader = DatasetLoader(id_tr_df, id_te_df, ood_tr_df, ood_te_df, config.sample_size)
-
     if config.task == 'ate':
         if loader.train_df_id is not None:
             train_df_id = loader.create_data_in_ate_format(loader.train_df_id, 'term', 'raw_text', 'aspectTerms', bos_instruction_id, eos_instruction)
         if loader.test_df_id is not None:
-            test_df_id = loader.create_data_in_ate_format(loader.test_df_id, 'term', 'raw_text', 'aspectTerms', bos_instruction_ood, eos_instruction)
+            test_df_id = loader.create_data_in_ate_format(loader.test_df_id, 'term', 'raw_text', 'aspectTerms', bos_instruction_id, eos_instruction)
         if loader.train_df_ood is not None:
-            train_df_ood = loader.create_data_in_ate_format(loader.train_df_ood, 'term', 'raw_text', 'aspectTerms', bos_instruction_id, eos_instruction)
+            train_df_ood = loader.create_data_in_ate_format(loader.train_df_ood, 'term', 'raw_text', 'aspectTerms', bos_instruction_ood, eos_instruction)
         if loader.test_df_ood is not None:
             test_df_ood = loader.create_data_in_ate_format(loader.test_df_ood, 'term', 'raw_text', 'aspectTerms', bos_instruction_ood, eos_instruction)
-        if loader.train_df is not None:
-            train_df = loader.create_data_in_ate_format(loader.train_df, 'term', 'raw_text', 'aspectTerms', bos_instruction_id, eos_instruction)
-        if loader.test_df is not None:
-            test_df = loader.create_data_in_ate_format(loader.test_df, 'term', 'raw_text', 'aspectTerms', bos_instruction_ood, eos_instruction)
 
     elif config.task == 'atsc':
         if loader.train_df_id is not None:
             train_df_id = loader.create_data_in_atsc_format(loader.train_df_id, 'aspectTerms', 'term', 'raw_text', 'aspect', bos_instruction_id, delim_instruction, eos_instruction)
         if loader.test_df_id is not None:
-            test_df_id = loader.create_data_in_atsc_format(loader.test_df_id, 'aspectTerms', 'term', 'raw_text', 'aspect', bos_instruction_ood, delim_instruction, eos_instruction)
+            test_df_id = loader.create_data_in_atsc_format(loader.test_df_id, 'aspectTerms', 'term', 'raw_text', 'aspect', bos_instruction_id, delim_instruction, eos_instruction)
         if loader.train_df_ood is not None:
-            train_df_ood = loader.create_data_in_atsc_format(loader.train_df_ood, 'aspectTerms', 'term', 'raw_text', 'aspect', bos_instruction_id, delim_instruction, eos_instruction)
+            train_df_ood = loader.create_data_in_atsc_format(loader.train_df_ood, 'aspectTerms', 'term', 'raw_text', 'aspect', bos_instruction_ood, delim_instruction, eos_instruction)
         if loader.test_df_ood is not None:
             test_df_ood = loader.create_data_in_atsc_format(loader.test_df_ood, 'aspectTerms', 'term', 'raw_text', 'aspect', bos_instruction_ood, delim_instruction, eos_instruction)
-        if loader.train_df is not None:
-            train_df = loader.create_data_in_atsc_format(loader.train_df, 'aspectTerms', 'term', 'raw_text', 'aspect', bos_instruction_id, delim_instruction, eos_instruction)
-        if loader.test_df is not None:
-            test_df = loader.create_data_in_atsc_format(loader.test_df, 'aspectTerms', 'term', 'raw_text', 'aspect', bos_instruction_ood, delim_instruction, eos_instruction)
 
     elif config.task == 'joint':
         if loader.train_df_id is not None:
             train_df_id = loader.create_data_in_joint_task_format(loader.train_df_id, 'term', 'polarity', 'raw_text', 'aspectTerms', bos_instruction_id, eos_instruction)
         if loader.test_df_id is not None:
-            test_df_id = loader.create_data_in_joint_task_format(loader.test_df_id, 'term', 'polarity', 'raw_text', 'aspectTerms', bos_instruction_ood, eos_instruction)
+            test_df_id = loader.create_data_in_joint_task_format(loader.test_df_id, 'term', 'polarity', 'raw_text', 'aspectTerms', bos_instruction_id, eos_instruction)
         if loader.train_df_ood is not None:
-            train_df_ood = loader.create_data_in_joint_task_format(loader.train_df_ood, 'term', 'polarity', 'raw_text', 'aspectTerms', bos_instruction_id, eos_instruction)
+            train_df_ood = loader.create_data_in_joint_task_format(loader.train_df_ood, 'term', 'polarity', 'raw_text', 'aspectTerms', bos_instruction_ood, eos_instruction)
         if loader.test_df_ood is not None:
             test_df_ood = loader.create_data_in_joint_task_format(loader.test_df_ood, 'term', 'polarity', 'raw_text', 'aspectTerms', bos_instruction_ood, eos_instruction)
-        if loader.train_df is not None:
-            train_df = loader.create_data_in_joint_task_format(loader.train_df, 'term', 'polarity', 'raw_text', 'aspectTerms', bos_instruction_id, eos_instruction)
-        if loader.test_df is not None:
-            test_df = loader.create_data_in_joint_task_format(loader.test_df, 'term', 'polarity', 'raw_text', 'aspectTerms', bos_instruction_ood, eos_instruction)
 
     # Tokenize dataset
     id_ds, id_tokenized_ds, ood_ds, ood_tokenzed_ds = loader.set_data_for_training_semeval(t5_exp.tokenize_function_inputs)

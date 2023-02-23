@@ -8,8 +8,8 @@ from transformers import (
 
 class T5Generator:
     def __init__(self, model_checkpoint):
-        self.tokenizer = AutoTokenizer.from_pretrained(model_checkpoint, force_download = True)
-        self.model = AutoModelForSeq2SeqLM.from_pretrained(model_checkpoint, force_download = True)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+        self.model = AutoModelForSeq2SeqLM.from_pretrained(model_checkpoint)
         self.data_collator = DataCollatorForSeq2Seq(self.tokenizer)
 
     def tokenize_function_inputs(self, sample):
@@ -25,7 +25,6 @@ class T5Generator:
         """
         Train the generative model.
         """
-
         #Set training arguments
         args = Seq2SeqTrainingArguments(
             **kwargs

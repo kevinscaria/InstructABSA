@@ -20,7 +20,7 @@ An example dataset is shown below:
 | The cab ride was amazing but the service was pricey  | [{'term':'cab ride', 'polarity':'positive'}, {'term':'service', 'polarity':'negative'}]  |
 | I ordered the Barbeque Pizza | []  |
 
-## Model Checkpoints
+## Model Checkpoints (Coming Soon)
 | Task  | Model Name | Remarks |
 | ------------- | ------------- | ------------- |
 | ATE| - | - |

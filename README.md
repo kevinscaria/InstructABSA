@@ -54,9 +54,7 @@ The ATSC models can be trained from scratch or alternatively can be used to run 
 
 To evaluate the ATSC subtask on a single input using CLI run the following:
 ```shell
-python run_model.py -mode cli -task atsc \
--model_checkpoint kevinscaria/atsc_tk-instruct-base-def-pos-combined \
--test_input 'The cab ride was amazing but the service was pricey|cab ride'
+python run_model.py -mode cli -task atsc -model_checkpoint kevinscaria/atsc_tk-instruct-base-def-pos-neg-neut-combined -test_input 'The ambience was amazing but the waiter was rude|ambience'
 ```
 Note the ```|``` delimiter that is used to pass the aspect term for which the polarity is to be extracted.
 

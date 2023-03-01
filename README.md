@@ -28,7 +28,7 @@ An example dataset is shown below and also in the [Datasets](https://github.com/
 
 ## Model Checkpoints
 
-All the model weights can be found [here](https://huggingface.co/kevinscaria). The best performing models for each task based on our experiments are presented in the table below:
+All the model weights can be found [here](https://huggingface.co/kevinscaria). The best performing models for each ABSA subtask based on our experiments are presented in the table below:
 | Task  | Model Name | Dataset Trained | Model Type | Instruction Configuration |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | ATE| kevinscaria/ate_tk-instruct-base-def-pos-neg-neut-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-2 | Definition + 2 pos + 2 neg + 2 neut examples |

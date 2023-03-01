@@ -28,7 +28,9 @@ An example dataset is shown below:
 | The cab ride was amazing but the service was pricey  | [{'term':'cab ride', 'polarity':'positive'}, {'term':'service', 'polarity':'negative'}]  |
 | I ordered the Barbeque Pizza | [{'term':'noaspectterm', 'polarity':'none'}] |
 
-## Model Checkpoints (Coming Soon)
+## Model Checkpoints
+
+All the model weights can be found (here)[https://huggingface.co/kevinscaria].
 | Task  | Model Name | Dataset Trained | Model Type | Instruction Configuration |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | ATE| kevinscaria/ate_tk-instruct-base-def-pos-neg-neut-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-2 | Definition + 2 pos + 2 neg + 2 neut examples |

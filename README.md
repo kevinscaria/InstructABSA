@@ -39,7 +39,7 @@ All the model weights can be found [here](https://huggingface.co/kevinscaria). T
 
 ## Aspect Term Extraction
 
-The ATE models can be trained from scratch or alternatively can be used to run inference on your datasets directly. There are two ways this can be done. The first one is through the CLI commands which is shown below:
+The ATE models can be trained from scratch or alternatively can be used to run inference on your datasets directly. This can be done through CLI (check the [Scripts](https://github.com/kevinscaria/InstructABSA/tree/main/Scripts) folder) or by adapting your code similar to run_model.py. An example shell command to run inference on individual samples is shown below.
 
 To evaluate the ATE subtask on a single input using CLI run the following:
 ```shell
@@ -50,7 +50,7 @@ python run_model.py -mode cli -task ate \
 
 ## Aspect Term Sentiment Classification
 
-The ATE models can be trained from scratch or alternatively can be used to run inference on your datasets directly. There are two ways this can be done. The first one is through the CLI commands which is shown below:
+The ATSC models can be trained from scratch or alternatively can be used to run inference on your datasets directly. This can be done through CLI (check the [Scripts](https://github.com/kevinscaria/InstructABSA/tree/main/Scripts) folder) or by adapting your code similar to run_model.py. An example shell command to run inference on individual samples is shown below.
 
 To evaluate the ATSC subtask on a single input using CLI run the following:
 ```shell
@@ -63,7 +63,7 @@ Note the ```|``` delimiter that is used to pass the aspect term for which the po
 
 ## Joint Tasks
 
-The ATE models can be trained from scratch or alternatively can be used to run inference on your datasets directly. There are two ways this can be done. The first one is through the CLI commands which is shown below:
+The Joint task models can be trained from scratch or alternatively can be used to run inference on your datasets directly. This can be done through CLI (check the [Scripts](https://github.com/kevinscaria/InstructABSA/tree/main/Scripts) folder) or by adapting your code similar to run_model.py. An example shell command to run inference on individual samples is shown below.
 
 To evaluate the Joint Task on a single input using CLI run the following:
 ```shell

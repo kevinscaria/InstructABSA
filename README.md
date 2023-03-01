@@ -8,8 +8,6 @@
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/instructabsa-instruction-learning-for-aspect/sentiment-analysis-on-semeval-2014-task-4)](https://paperswithcode.com/sota/sentiment-analysis-on-semeval-2014-task-4?p=instructabsa-instruction-learning-for-aspect)
 
 
-(NOTE: This repository is a work in progress it will be completed by Sunday - February 26 2023)
-
 This repository is the official implementation of the [paper](https://arxiv.org/abs/2302.08624). As part of our approach we show the efficacy of instruction tuned language models. This approach surpasses previous SOTA on downstream ABSA subtasks by significant margin.
 
 ## Dataset Requirements

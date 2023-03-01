@@ -26,13 +26,14 @@ An example dataset is shown below:
 | raw_text  | aspectTerms |
 | ------------- | ------------- |
 | The cab ride was amazing but the service was pricey  | [{'term':'cab ride', 'polarity':'positive'}, {'term':'service', 'polarity':'negative'}]  |
-| I ordered the Barbeque Pizza | []  |
+| I ordered the Barbeque Pizza | [{'term':'noaspectterm', 'polarity':'none'}] |
 
 ## Model Checkpoints (Coming Soon)
-| Task  | Model Name | Remarks |
-| ------------- | ------------- | ------------- |
-| ATE| - | - |
-| ATSC| - | - |
+| Task  | Model Name | Dataset Trained | Model Type | Instruction Configuration |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
+| ATE| kevinscaria/ate_tk-instruct-base-def-pos-neg-neut-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-2 | Definition + 2 pos + 2 neg + 2 neut examples |
+| ATSC| kevinscaria/atsc_tk-instruct-base-def-pos-neg-neut-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-2 | Definition + 2 pos + 2 neg + 2 neut examples |
+| Joint Task| kevinscaria/joint_tk-instruct-base-def-pos-neg-neut-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-2 | Definition + 2 pos + 2 neg + 2 neut examples |
 
 ## Aspect Term Extraction
 

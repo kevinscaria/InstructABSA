@@ -30,11 +30,11 @@ An example dataset is shown below:
 
 ## Model Checkpoints
 
-All the model weights can be found (here)[https://huggingface.co/kevinscaria].
+All the model weights can be found [here](https://huggingface.co/kevinscaria). The best performing models fro each task based on our experiments are presented in the table below:
 | Task  | Model Name | Dataset Trained | Model Type | Instruction Configuration |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | ATE| kevinscaria/ate_tk-instruct-base-def-pos-neg-neut-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-2 | Definition + 2 pos + 2 neg + 2 neut examples |
-| ATSC| kevinscaria/atsc_tk-instruct-base-def-pos-neg-neut-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-2 | Definition + 2 pos + 2 neg + 2 neut examples |
+| ATSC| kevinscaria/atsc_tk-instruct-base-def-pos-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-1 | Definition + 2 pos examples |
 | Joint Task| kevinscaria/joint_tk-instruct-base-def-pos-neg-neut-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-2 | Definition + 2 pos + 2 neg + 2 neut examples |
 
 ## Aspect Term Extraction

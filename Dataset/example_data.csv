@@ -1,0 +1,6 @@
+﻿raw_text,aspectTerms
+"The cab ride was awesome, but the driver was rude","[{'term':'cab ride', 'polarity':'positive'}, {'term':'driver', 'polarity':'negative'}]"
+"The ambience was exceptional, but there were limitied menu options","[{'term':'ambience', 'polarity':'positive'}, {'term':'menu', 'polarity':'positive'}]"
+"The car has great mileage, but the upholsrtery wasn't classy.","[{'term':'car', 'polarity':'positive'}, {'term':'upholstery', 'polarity':'negative'}]"
+"The doctors were great, but the radiologists did a bad job with my MRI.","[{'term':'doctors', 'polarity':'positive'}, {'term':'radiologists', 'polarity':'positive'}]"
+The shop had several laptop options,"[{'term':'noaspectterm', 'polarity':'none'}]"

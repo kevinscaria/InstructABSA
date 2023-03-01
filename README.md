@@ -22,7 +22,7 @@ This section describes the format of the data required for the training and eval
 >**Warning**
 >When creating the dataset in this fashion and saving it, ```.xlsx/.csv``` format will convert the aspectTerms column into ```string/text``` format. But the package will handle that when loading the dataset file. 
 
-An example dataset is shown below:
+An example dataset is shown below and also in the [Datasets](https://github.com/kevinscaria/InstructABSA/tree/main/Dataset) folder.
 | raw_text  | aspectTerms |
 | ------------- | ------------- |
 | The cab ride was amazing but the service was pricey  | [{'term':'cab ride', 'polarity':'positive'}, {'term':'service', 'polarity':'negative'}]  |
@@ -44,7 +44,7 @@ The ATE models can be trained from scratch or alternatively can be used to run i
 To evaluate the ATE subtask on a single input using CLI run the following:
 ```shell
 python run_model.py -mode cli -task ate \
--model_checkpoint Models/ATE/allenai/tk-instruct-base-def-pos-combined100_instruct_pos_neg_neut/checkpoints \
+-model_checkpoint kevinscaria/ate_tk-instruct-base-def-pos-neg-neut-combined \
 -test_input 'The cab ride was amazing but the service was pricey'
 ```
 
@@ -55,7 +55,7 @@ The ATE models can be trained from scratch or alternatively can be used to run i
 To evaluate the ATSC subtask on a single input using CLI run the following:
 ```shell
 python run_model.py -mode cli -task atsc \
--model_checkpoint Models/ATSC/allenai/tk-instruct-base-def-pos-combined100_instruct_pos_neg_neut/checkpoints \
+-model_checkpoint kevinscaria/atsc_tk-instruct-base-def-pos-combined \
 -test_input 'The cab ride was amazing but the service was pricey|cab ride'
 ```
 Note the ```|``` delimiter that is used to pass the aspect term for which the polarity is to be extracted.
@@ -68,7 +68,7 @@ The ATE models can be trained from scratch or alternatively can be used to run i
 To evaluate the Joint Task on a single input using CLI run the following:
 ```shell
 python run_model.py -mode cli -task joint \
--model_checkpoint Models/JointTask/allenai/tk-instruct-base-def-pos-combined100_instruct_pos_neg_neut/checkpoints \
+-model_checkpoint kevinscaria/joint_tk-instruct-base-def-pos-neg-neut-combined \
 -test_input 'The cab ride was amazing but the service was pricey'
 ```
 

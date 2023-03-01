@@ -76,16 +76,9 @@ class T5Generator:
         trainer_outputs = [i.replace('<pad>', '').replace('</s>', '').lstrip().rstrip() for i in self.tokenizer.batch_decode(output_ids)]
         return trainer_outputs
 
-    # def get_csv_filename(self, ):
-    #     if experiment_id in ['restaurants', 'laptops']:
-    #         return [self.train_df_id_name, self.test_df_id_name, self.train_df_ood_name, self.test_df_ood_name]
-    #     else:
-    #         return [self.train_name, self.test_name]
-
-
 
 class T5Classifier:
-    def __init__(self, model_checkpoint, experiment_id=None):
+    def __init__(self, model_checkpoint):
         self.tokenizer = AutoTokenizer.from_pretrained(model_checkpoint, force_download = True)
         self.model = T5ForConditionalGeneration.from_pretrained(model_checkpoint, force_download = True)
         self.data_collator = DataCollatorForSeq2Seq(self.tokenizer)
@@ -104,7 +97,7 @@ class T5Classifier:
         """
 
         # Set training arguments
-        args = TrainingArguments(
+        args = Seq2SeqTrainingArguments(
             **kwargs
             )
 
@@ -136,7 +129,7 @@ class T5Classifier:
             ft_model = T5ForConditionalGeneration.from_pretrained(trained_model_path)
 
             # Prediction args
-            pred_args = TrainingArguments(
+            pred_args = Seq2SeqTrainingArguments(
                 output_dir = './',
                 do_train = False,
                 do_predict = True,
@@ -153,13 +146,7 @@ class T5Classifier:
         output_ids = np.argmax(pred_proba, axis=2)
         trainer_outputs = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)
         return trainer_outputs
-
-    # def get_csv_filename(self, experiment_id, ):
-    #     if experiment_id in ['restaurants', 'laptops']:
-    #         return [self.train_df_id_name, self.test_df_id_name, self.train_df_ood_name, self.test_df_ood_name]
-    #     else:
-    #         return [self.train_name, self.test_name]
-
+    
 
 class Evaluator:
     def __init__(self, y_true, y_pred):
@@ -182,87 +169,3 @@ class Evaluator:
         p = tp/total_pred
         r = tp/total_gt
         return p, r, 2*p*r/(p+r) 
-
-
-
-# class T5JointTask:
-#     def __init__(self, model_checkpoint, experiment_id=None, rest_train_df=None, rest_test_df=None, lap_train_df=None, 
-#                  lap_test_df=None, train_df=None, test_df=None, valid_df=None, sample_size = 1):
-#         self.tokenizer = AutoTokenizer.from_pretrained(model_checkpoint, force_download = True)
-#         self.model = AutoModelForSeq2SeqLM.from_pretrained(model_checkpoint, force_download = True)
-#         self.data_collator = DataCollatorForSeq2Seq(self.tokenizer)
-
-#     def tokenize_function_inputs(self, sample):
-#         """
-#         Udf to tokenize the input dataset.
-#         """
-#         model_inputs = self.tokenizer(sample['text'], max_length=512, truncation=True)
-
-#         # Setup the tokenizer for targets
-#         labels = self.tokenizer(sample["labels"], max_length=64, truncation=True)
-#         model_inputs["labels"] = labels["input_ids"]
-#         return model_inputs
-        
-#     def train(self, tokenized_datasets, **kwargs):
-#         """
-#         Train the generative model.
-#         """
-
-#         #Set training arguments
-#         args = Seq2SeqTrainingArguments(
-#             **kwargs
-#         )
-
-#         # Define trainer object
-#         trainer = Seq2SeqTrainer(
-#             self.model,
-#             args,
-#             train_dataset=tokenized_datasets["train"],
-#             eval_dataset=tokenized_datasets["test"],
-#             tokenizer=self.tokenizer,
-#             data_collator=self.data_collator,
-#         )
-#         print("Trainer device:", trainer.args.device)
-
-#         # Finetune the model
-#         torch.cuda.empty_cache()
-#         print('\nModel training started ....')
-#         trainer.train()
-
-#         # Save best model
-#         trainer.save_model()
-#         return trainer
-
-#     def get_labels(self, tokenized_dataset, trained_model_path=None, predictor = None, batch_size =4, sample_set = 'train'):
-#         """
-#         Get the predictions from the trained model.
-#         """
-#         if not predictor:
-#             ft_model = AutoModelForSeq2SeqLM.from_pretrained(trained_model_path)
-
-#             # Prediction args
-#             pred_args = Seq2SeqTrainingArguments(
-#                 output_dir = './',
-#                 do_train = False,
-#                 do_predict = True,
-#                 per_device_eval_batch_size = batch_size,
-#             )
-
-#             # Initialize prediction trainer
-#             predictor = Seq2SeqTrainer(
-#                         model = ft_model, 
-#                         args = pred_args, 
-#                         data_collator = self.data_collator 
-#                         )
-
-#         output_ids = predictor.predict(test_dataset=tokenized_dataset[sample_set]).predictions
-#         trainer_outputs = [i.replace('<pad>', '').replace('</s>', '').lstrip().rstrip() for i in self.tokenizer.batch_decode(output_ids)]
-#         return trainer_outputs
-
-#     def get_csv_filename(self, experiment_id, ):
-#         if experiment_id in ['restaurants', 'laptops']:
-#             return [self.train_df_id_name, self.test_df_id_name, self.train_df_ood_name, self.test_df_ood_name]
-#         else:
-#             return [self.train_name, self.test_name]
-    
-    

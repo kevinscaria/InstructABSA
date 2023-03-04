@@ -63,17 +63,19 @@ class T5Generator:
                 output_dir = './',
                 do_train = False,
                 do_predict = True,
-                per_device_eval_batch_size = batch_size 
+                per_device_eval_batch_size = batch_size
             )
 
             # Initialize prediction trainer
             predictor = Seq2SeqTrainer(
                         model = ft_model, 
-                        args = pred_args
+                        args = pred_args, 
+                        data_collator=self.data_collator 
                         )
 
         output_ids = predictor.predict(test_dataset=tokenized_dataset[sample_set]).predictions
-        trainer_outputs = [i.replace('<pad>', '').replace('</s>', '').lstrip().rstrip() for i in self.tokenizer.batch_decode(output_ids)]
+        predicted_ids = np.argmax(output_ids[0], axis=-1)
+        trainer_outputs = [i.replace('<pad>', '').replace('</s>', '').lstrip().rstrip() for i in self.tokenizer.batch_decode(predicted_ids)]
         return trainer_outputs
 
 
@@ -149,15 +151,14 @@ class T5Classifier:
     
 
 class Evaluator:
-    def __init__(self, y_true, y_pred):
-        self.y_true = y_true
-        self.y_pred = y_pred
+    def __init__(self,):
+        pass
 
-    def get_metrics(self, ):
+    def get_metrics(self, y_true, y_pred):
         total_pred = 0
         total_gt = 0
         tp = 0
-        for gt, pred in zip(self.y_true, self.y_pred):
+        for gt, pred in zip(y_true, y_pred):
             gt_list = gt.split(', ')
             pred_list = pred.split(', ')
             total_pred+=len(pred_list)

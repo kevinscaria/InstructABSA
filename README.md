@@ -35,7 +35,7 @@ All the model weights can be found [here](https://huggingface.co/kevinscaria). T
 | ATSC| kevinscaria/atsc_tk-instruct-base-def-pos-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-1 | Definition + 2 pos examples |
 | Joint Task| kevinscaria/joint_tk-instruct-base-def-pos-neg-neut-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-2 | Definition + 2 pos + 2 neg + 2 neut examples |
 
-A sample inference notebook is found [here](https://github.com/kevinscaria/InstructABSA/blob/main/inference_notebook.ipynb).
+### A sample inference notebook is found [here](https://github.com/kevinscaria/InstructABSA/blob/main/inference_notebook.ipynb).
 
 ## Aspect Term Extraction
 

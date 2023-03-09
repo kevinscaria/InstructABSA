@@ -2,7 +2,7 @@ import torch
 import numpy as np
 from transformers import (
     DataCollatorForSeq2Seq, AutoTokenizer, AutoModelForSeq2SeqLM, T5ForConditionalGeneration,
-    TrainingArguments, Seq2SeqTrainingArguments, Trainer, Seq2SeqTrainer
+    Seq2SeqTrainingArguments, Trainer, Seq2SeqTrainer
 )
 
 
@@ -35,7 +35,7 @@ class T5Generator:
             self.model,
             args,
             train_dataset=tokenized_datasets["train"],
-            eval_dataset=tokenized_datasets["test"],
+            eval_dataset=tokenized_datasets["test"] if tokenized_datasets.get("test") is not None else None,
             tokenizer=self.tokenizer,
             data_collator=self.data_collator,
         )
@@ -77,6 +77,23 @@ class T5Generator:
         predicted_ids = np.argmax(output_ids[0], axis=-1)
         trainer_outputs = [i.replace('<pad>', '').replace('</s>', '').lstrip().rstrip() for i in self.tokenizer.batch_decode(predicted_ids)]
         return trainer_outputs
+    
+    def get_metrics(self, y_true, y_pred):
+        total_pred = 0
+        total_gt = 0
+        tp = 0
+        for gt, pred in zip(y_true, y_pred):
+            gt_list = gt.split(', ')
+            pred_list = pred.split(', ')
+            total_pred+=len(pred_list)
+            total_gt+=len(gt_list)
+            for gt_val in gt_list:
+                for pred_val in pred_list:
+                    if pred_val in gt_val:
+                        tp+=1
+        p = tp/total_pred
+        r = tp/total_gt
+        return p, r, 2*p*r/(p+r) 
 
 
 class T5Classifier:
@@ -108,7 +125,7 @@ class T5Classifier:
             self.model,
             args,
             train_dataset=tokenized_datasets["train"],
-            eval_dataset=tokenized_datasets["test"],
+            eval_dataset=tokenized_datasets["test"] if tokenized_datasets.get("test") is not None else None,
             tokenizer=self.tokenizer, 
             data_collator = self.data_collator 
         )
@@ -149,24 +166,9 @@ class T5Classifier:
         trainer_outputs = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)
         return trainer_outputs
     
-
-class Evaluator:
-    def __init__(self,):
-        pass
-
     def get_metrics(self, y_true, y_pred):
-        total_pred = 0
-        total_gt = 0
-        tp = 0
-        for gt, pred in zip(y_true, y_pred):
-            gt_list = gt.split(', ')
-            pred_list = pred.split(', ')
-            total_pred+=len(pred_list)
-            total_gt+=len(gt_list)
-            for gt_val in gt_list:
-                for pred_val in pred_list:
-                    if pred_val in gt_val:
-                        tp+=1
-        p = tp/total_pred
-        r = tp/total_gt
-        return p, r, 2*p*r/(p+r) 
+        cnt = 0
+        for gt, pred in y_true, y_pred:
+            if gt == pred:
+                cnt+=1
+        return cnt/len(y_true)

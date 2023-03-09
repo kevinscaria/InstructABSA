@@ -1,6 +1,3 @@
-import os
-import pandas as pd
-import xml.etree.ElementTree as ET
 from datasets import Dataset
 from datasets.dataset_dict import DatasetDict
 
@@ -106,12 +103,24 @@ class DatasetLoader:
         Create the training and test dataset as huggingface datasets format.
         """
         # Define train and test sets
-        indomain_dataset = DatasetDict({'train': Dataset.from_pandas(self.train_df_id), 'test': Dataset.from_pandas(self.test_df_id)})
+        if self.test_df_id is None:
+            indomain_dataset = DatasetDict({'train': Dataset.from_pandas(self.train_df_id)})
+        else:
+            indomain_dataset = DatasetDict({'train': Dataset.from_pandas(self.train_df_id), 'test': Dataset.from_pandas(self.test_df_id)})
         indomain_tokenized_datasets = indomain_dataset.map(tokenize_function, batched=True)
 
-        if (self.train_df_ood is not None) and (self.test_df_ood is not None):
+        if (self.train_df_ood is not None) and (self.test_df_ood is None):
+            other_domain_dataset = DatasetDict({'train': Dataset.from_pandas(self.train_df_id)})
+            other_domain_tokenized_dataset = other_domain_dataset.map(tokenize_function, batched=True)
+        elif (self.train_df_ood is None) and (self.test_df_ood is not None):
+            other_domain_dataset = DatasetDict({'test': Dataset.from_pandas(self.train_df_id)})
+            other_domain_tokenized_dataset = other_domain_dataset.map(tokenize_function, batched=True)
+        elif (self.train_df_ood is not None) and (self.test_df_ood is not None):
             other_domain_dataset = DatasetDict({'train': Dataset.from_pandas(self.train_df_ood), 'test': Dataset.from_pandas(self.test_df_ood)})
             other_domain_tokenized_dataset = other_domain_dataset.map(tokenize_function, batched=True)
-            return indomain_dataset, indomain_tokenized_datasets, other_domain_dataset, other_domain_tokenized_dataset
+        else:
+            other_domain_dataset = None
+            other_domain_tokenized_dataset = None
         
-        return indomain_dataset, indomain_tokenized_datasets, None, None
+        return indomain_dataset, indomain_tokenized_datasets, other_domain_dataset, other_domain_tokenized_dataset
+        

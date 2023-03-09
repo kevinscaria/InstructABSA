@@ -5,7 +5,7 @@ import pandas as pd
 
 import torch
 from InstructABSA.data_prep import DatasetLoader
-from InstructABSA.utils import T5Generator, T5Classifier, Evaluator
+from InstructABSA.utils import T5Generator, T5Classifier
 from InstructABSA.config import Config
 from instructions import InstructionsHandler
 
@@ -17,8 +17,20 @@ except:
 # Set Global Values
 config = Config()
 instruct_handler = InstructionsHandler()
-instruct_handler.load_instruction_set2()
+if config.inst_type == 1:
+    instruct_handler.load_instruction_set1()
+else:
+    instruct_handler.load_instruction_set2()
+
 print('Task: ', config.task)
+
+if config.mode == 'train':
+    if config.id_tr_data_path is None:
+        raise Exception('Please provide training data path for mode=training.')
+    
+if config.mode == 'eval':
+    if config.id_te_data_path is None:
+        raise Exception('Please provide testing data path for mode=eval.')
 
 if config.experiment_name is not None and config.mode == 'train':
     print('Experiment Name: ', config.experiment_name)
@@ -142,46 +154,46 @@ if config.mode != 'cli':
     elif config.mode == 'eval':
         # Get prediction labels
         print('Model loaded from: ', model_checkpoint)
-        evals = Evaluator()
-        id_tr_pred_labels = t5_exp.get_labels(tokenized_dataset = id_tokenized_ds, sample_set = 'train', trained_model_path = model_out_path)
-        id_te_pred_labels = t5_exp.get_labels(tokenized_dataset = id_tokenized_ds, sample_set = 'test', trained_model_path = model_out_path)
-        id_tr_df = pd.DataFrame(id_ds['train'])[['text', 'labels']]
-        id_te_df = pd.DataFrame(id_ds['test'])[['text', 'labels']]
-        id_tr_df['pred_labels'], id_te_df['pred_labels'] = id_tr_pred_labels, id_te_pred_labels
-        # Dump output
-        id_tr_df.to_csv(os.path.join(config.output_path, f'{config.experiment_name}_id_train.csv'), index=False)
-        id_te_df.to_csv(os.path.join(config.output_path, f'{config.experiment_name}_id_test.csv'), index=False)
-
-        print('*****Train Metrics*****')
-        precision, recall, f1 = evals.get_metrics(id_tr_df['labels'], id_tr_pred_labels)
-        print('Precision: ', precision)
-        print('Recall: ', precision)
-        print('F1-Score: ', precision)
-
-        print('*****Test Metrics*****')
-        precision, recall, f1 = evals.get_metrics(id_te_df['labels'], id_te_pred_labels)
-        print('Precision: ', precision)
-        print('Recall: ', precision)
-        print('F1-Score: ', precision)
-
-        if ood_tokenized_ds:
-            ood_tr_pred_labels = t5_exp.get_labels(tokenized_dataset = ood_tokenized_ds, sample_set = 'train', trained_model_path = model_out_path)
-            ood_te_pred_labels = t5_exp.get_labels(tokenized_dataset = ood_tokenized_ds, sample_set = 'test', trained_model_path = model_out_path)
-            ood_tr_df = pd.DataFrame(ood_ds['train'])[['text', 'labels']]
-            ood_te_df = pd.DataFrame(ood_ds['test'])[['text', 'labels']]
-            ood_tr_df['pred_labels'], ood_te_df['pred_labels'] = ood_tr_pred_labels, ood_te_pred_labels
-            # Dump output
-            ood_tr_df.to_csv(os.path.join(config.output_path, f'{config.experiment_name}_ood_train.csv'), index=False)
-            ood_te_df.to_csv(os.path.join(config.output_path, f'{config.experiment_name}_ood_test.csv'), index=False)
-
-            print('*****Train Metrics - OOD*****')
-            precision, recall, f1 = evals.get_metrics(ood_tr_df['labels'], ood_tr_pred_labels)
+        if id_tokenized_ds.get("train") is not None:
+            id_tr_pred_labels = t5_exp.get_labels(tokenized_dataset = id_tokenized_ds, sample_set = 'train', trained_model_path = model_out_path)
+            id_tr_df = pd.DataFrame(id_ds['train'])[['text', 'labels']]
+            id_tr_df['pred_labels'] = id_tr_pred_labels
+            id_tr_df.to_csv(os.path.join(config.output_path, f'{config.experiment_name}_id_train.csv'), index=False)
+            print('*****Train Metrics*****')
+            precision, recall, f1 = t5_exp.get_metrics(id_tr_df['labels'], id_tr_pred_labels)
             print('Precision: ', precision)
             print('Recall: ', precision)
             print('F1-Score: ', precision)
 
+        if id_tokenized_ds.get("test") is not None:
+            id_te_pred_labels = t5_exp.get_labels(tokenized_dataset = id_tokenized_ds, sample_set = 'test', trained_model_path = model_out_path)
+            id_te_df = pd.DataFrame(id_ds['test'])[['text', 'labels']]
+            id_te_df['pred_labels'] = id_te_pred_labels
+            id_te_df.to_csv(os.path.join(config.output_path, f'{config.experiment_name}_id_test.csv'), index=False)
+            print('*****Test Metrics*****')
+            precision, recall, f1 = t5_exp.get_metrics(id_te_df['labels'], id_te_pred_labels)
+            print('Precision: ', precision)
+            print('Recall: ', precision)
+            print('F1-Score: ', precision)
+
+        if ood_tokenized_ds.get("train") is not None:
+            ood_tr_pred_labels = t5_exp.get_labels(tokenized_dataset = ood_tokenized_ds, sample_set = 'train', trained_model_path = model_out_path)
+            ood_tr_df = pd.DataFrame(ood_ds['train'])[['text', 'labels']]
+            ood_tr_df['pred_labels'] = ood_tr_pred_labels
+            ood_tr_df.to_csv(os.path.join(config.output_path, f'{config.experiment_name}_ood_train.csv'), index=False)
+            print('*****Train Metrics - OOD*****')
+            precision, recall, f1 = t5_exp.get_metrics(ood_tr_df['labels'], ood_tr_pred_labels)
+            print('Precision: ', precision)
+            print('Recall: ', precision)
+            print('F1-Score: ', precision)
+            
+        if ood_tokenized_ds.get("test") is not None:
+            ood_te_pred_labels = t5_exp.get_labels(tokenized_dataset = ood_tokenized_ds, sample_set = 'test', trained_model_path = model_out_path)
+            ood_te_df = pd.DataFrame(ood_ds['test'])[['text', 'labels']]
+            ood_te_df['pred_labels'] = ood_te_pred_labels
+            ood_te_df.to_csv(os.path.join(config.output_path, f'{config.experiment_name}_ood_test.csv'), index=False)
             print('*****Test Metrics - OOD*****')
-            precision, recall, f1 = evals.get_metrics(ood_te_df['labels'], ood_te_pred_labels)
+            precision, recall, f1 = t5_exp.get_metrics(ood_te_df['labels'], ood_te_pred_labels)
             print('Precision: ', precision)
             print('Recall: ', precision)
             print('F1-Score: ', precision)

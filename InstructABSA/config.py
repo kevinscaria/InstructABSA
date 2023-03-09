@@ -8,6 +8,7 @@ class Config(object):
         """
         self.mode = None
         self.model_checkpoint = None
+        self.inst_type = None
         self.experiment_name = None
         self.task = None
         self.output_dir = None
@@ -46,6 +47,7 @@ class Config(object):
         parser = ArgumentParser(description='training code')
         parser.add_argument('-mode', help='train/eval/cli', type=str, required=True)
         parser.add_argument('-model_checkpoint', help='Huggingface Model Path', type=str, required=True)
+        parser.add_argument('-inst_type', help='Decides if InstructABSA1 or InstructABSA2', type=int)
         parser.add_argument('-experiment_name', help='Name of experiment', type=str)
         parser.add_argument('-task', help='ate/atsc/joint', type=str)
         parser.add_argument('-output_dir', type=str)

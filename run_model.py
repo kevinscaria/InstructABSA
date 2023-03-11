@@ -36,7 +36,7 @@ if config.experiment_name is not None and config.mode == 'train':
     print('Experiment Name: ', config.experiment_name)
     model_checkpoint = config.model_checkpoint
     model_out_path = config.output_dir
-    model_out_path = os.path.join(model_out_path, config.task, f"{model_checkpoint}-{config.experiment_name}")
+    model_out_path = os.path.join(model_out_path, config.task, f"{model_checkpoint.replace('/', '')}-{config.experiment_name}")
 else:
     model_checkpoint = config.model_checkpoint
     model_out_path = config.model_checkpoint
@@ -70,9 +70,9 @@ training_args = {
                 'output_dir': model_out_path,
                 'evaluation_strategy': config.evaluation_strategy,
                 'learning_rate': config.learning_rate,
-                'per_device_train_batch_size': config.per_device_train_batch_size,
+                'per_device_train_batch_size': config.per_device_train_batch_size if config.per_device_train_batch_size is not None else None,
                 'per_device_eval_batch_size': config.per_device_eval_batch_size,
-                'num_train_epochs': config.num_train_epochs,
+                'num_train_epochs': config.num_train_epochs if config.num_train_epochs is not None else None,
                 'weight_decay': config.weight_decay,
                 'warmup_ratio': config.warmup_ratio,
                 'save_strategy': config.save_strategy,
@@ -176,27 +176,28 @@ if config.mode != 'cli':
             print('Recall: ', precision)
             print('F1-Score: ', precision)
 
-        if ood_tokenized_ds.get("train") is not None:
-            ood_tr_pred_labels = t5_exp.get_labels(tokenized_dataset = ood_tokenized_ds, sample_set = 'train', trained_model_path = model_out_path)
-            ood_tr_df = pd.DataFrame(ood_ds['train'])[['text', 'labels']]
-            ood_tr_df['pred_labels'] = ood_tr_pred_labels
-            ood_tr_df.to_csv(os.path.join(config.output_path, f'{config.experiment_name}_ood_train.csv'), index=False)
-            print('*****Train Metrics - OOD*****')
-            precision, recall, f1 = t5_exp.get_metrics(ood_tr_df['labels'], ood_tr_pred_labels)
-            print('Precision: ', precision)
-            print('Recall: ', precision)
-            print('F1-Score: ', precision)
-            
-        if ood_tokenized_ds.get("test") is not None:
-            ood_te_pred_labels = t5_exp.get_labels(tokenized_dataset = ood_tokenized_ds, sample_set = 'test', trained_model_path = model_out_path)
-            ood_te_df = pd.DataFrame(ood_ds['test'])[['text', 'labels']]
-            ood_te_df['pred_labels'] = ood_te_pred_labels
-            ood_te_df.to_csv(os.path.join(config.output_path, f'{config.experiment_name}_ood_test.csv'), index=False)
-            print('*****Test Metrics - OOD*****')
-            precision, recall, f1 = t5_exp.get_metrics(ood_te_df['labels'], ood_te_pred_labels)
-            print('Precision: ', precision)
-            print('Recall: ', precision)
-            print('F1-Score: ', precision)
+        if ood_tokenized_ds is not None:
+            if ood_tokenized_ds.get("train") is not None:
+                ood_tr_pred_labels = t5_exp.get_labels(tokenized_dataset = ood_tokenized_ds, sample_set = 'train', trained_model_path = model_out_path)
+                ood_tr_df = pd.DataFrame(ood_ds['train'])[['text', 'labels']]
+                ood_tr_df['pred_labels'] = ood_tr_pred_labels
+                ood_tr_df.to_csv(os.path.join(config.output_path, f'{config.experiment_name}_ood_train.csv'), index=False)
+                print('*****Train Metrics - OOD*****')
+                precision, recall, f1 = t5_exp.get_metrics(ood_tr_df['labels'], ood_tr_pred_labels)
+                print('Precision: ', precision)
+                print('Recall: ', precision)
+                print('F1-Score: ', precision)
+                
+            if ood_tokenized_ds.get("test") is not None:
+                ood_te_pred_labels = t5_exp.get_labels(tokenized_dataset = ood_tokenized_ds, sample_set = 'test', trained_model_path = model_out_path)
+                ood_te_df = pd.DataFrame(ood_ds['test'])[['text', 'labels']]
+                ood_te_df['pred_labels'] = ood_te_pred_labels
+                ood_te_df.to_csv(os.path.join(config.output_path, f'{config.experiment_name}_ood_test.csv'), index=False)
+                print('*****Test Metrics - OOD*****')
+                precision, recall, f1 = t5_exp.get_metrics(ood_te_df['labels'], ood_te_pred_labels)
+                print('Precision: ', precision)
+                print('Recall: ', precision)
+                print('F1-Score: ', precision)
 else:
     print('Model loaded from: ', model_checkpoint)
     if config.task == 'atsc':

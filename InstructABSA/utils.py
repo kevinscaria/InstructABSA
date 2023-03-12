@@ -1,4 +1,7 @@
 import torch
+from torch.utils.data import DataLoader
+from torch.nn.utils.rnn import pad_sequence
+from tqdm import tqdm
 import numpy as np
 from transformers import (
     DataCollatorForSeq2Seq, AutoTokenizer, AutoModelForSeq2SeqLM, T5ForConditionalGeneration,
@@ -11,6 +14,7 @@ class T5Generator:
         self.tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
         self.model = AutoModelForSeq2SeqLM.from_pretrained(model_checkpoint)
         self.data_collator = DataCollatorForSeq2Seq(self.tokenizer)
+        self.device = 'cuda' if torch.has_cuda else ('mps' if torch.has_mps else 'cpu')
 
     def tokenize_function_inputs(self, sample):
         """
@@ -56,27 +60,28 @@ class T5Generator:
         Get the predictions from the trained model.
         """
         if not predictor:
-            ft_model = AutoModelForSeq2SeqLM.from_pretrained(trained_model_path)
+            print('Prediction from checkpoint')
+            def collate_fn(batch):
+                input_ids = [torch.tensor(example['input_ids']) for example in batch]
+                input_ids = pad_sequence(input_ids, batch_first=True, padding_value=self.tokenizer.pad_token_id)
+                return input_ids
+            
+            dataloader = DataLoader(tokenized_dataset[sample_set], batch_size=batch_size, collate_fn=collate_fn)
+            predicted_output = []
+            self.model.to(self.device)
+            print('Model loaded to: ', self.device)
 
-            # Prediction args
-            pred_args = Seq2SeqTrainingArguments(
-                output_dir = './',
-                do_train = False,
-                do_predict = True,
-                per_device_eval_batch_size = batch_size
-            )
-
-            # Initialize prediction trainer
-            predictor = Seq2SeqTrainer(
-                        model = ft_model, 
-                        args = pred_args, 
-                        data_collator=self.data_collator 
-                        )
-
-        output_ids = predictor.predict(test_dataset=tokenized_dataset[sample_set]).predictions
-        predicted_ids = np.argmax(output_ids[0], axis=-1)
-        trainer_outputs = [i.replace('<pad>', '').replace('</s>', '').lstrip().rstrip() for i in self.tokenizer.batch_decode(predicted_ids)]
-        return trainer_outputs
+            for batch in tqdm(dataloader):
+                batch = batch.to(self.device)
+                output_ids = self.model.generate(batch)
+                output_texts = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)
+                for output_text in output_texts:
+                    predicted_output.append(output_text)
+        else:
+            print('Prediction from trainer')
+            output_ids = predictor.predict(test_dataset=tokenized_dataset[sample_set]).predictions
+            predicted_output = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)
+        return predicted_output
     
     def get_metrics(self, y_true, y_pred):
         total_pred = 0
@@ -89,7 +94,7 @@ class T5Generator:
             total_gt+=len(gt_list)
             for gt_val in gt_list:
                 for pred_val in pred_list:
-                    if pred_val in gt_val:
+                    if pred_val.strip().lower() == gt_val.strip().lower():
                         tp+=1
         p = tp/total_pred
         r = tp/total_gt
@@ -140,31 +145,34 @@ class T5Classifier:
         trainer.save_model()
         return trainer
 
-    def get_labels(self, tokenized_dataset, trained_model_path=None, predictor = None, batch_size = 4, sample_set = 'train'):
+    def get_labels(self, tokenized_dataset, predictor = None, batch_size = 4, sample_set = 'train'):
         """
         Get the predictions from the trained model.
         """
         if not predictor:
-            ft_model = T5ForConditionalGeneration.from_pretrained(trained_model_path)
+            print('Prediction from checkpoint')
+            def collate_fn(batch):
+                input_ids = [torch.tensor(example['input_ids']) for example in batch]
+                input_ids = pad_sequence(input_ids, batch_first=True, padding_value=self.tokenizer.pad_token_id)
+                return input_ids
+            
+            dataloader = DataLoader(tokenized_dataset[sample_set], batch_size=batch_size, collate_fn=collate_fn)
+            predicted_output = []
+            self.model.to(self.device)
+            print('Model loaded to: ', self.device)
 
-            # Prediction args
-            pred_args = Seq2SeqTrainingArguments(
-                output_dir = './',
-                do_train = False,
-                do_predict = True,
-                per_device_eval_batch_size = batch_size,   
-            )
-
-            # Initialize prediction trainer
-            predictor = Trainer(
-                        model = ft_model, 
-                        args = pred_args, 
-                        data_collator = self.data_collator 
-                        )
-        pred_proba = predictor.predict(test_dataset=tokenized_dataset[sample_set]).predictions[0]
-        output_ids = np.argmax(pred_proba, axis=2)
-        trainer_outputs = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)
-        return trainer_outputs
+            for batch in tqdm(dataloader):
+                batch = batch.to(self.device)
+                output_ids = self.model.to.generate(batch)
+                output_texts = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)
+                for output_text in output_texts:
+                    predicted_output.append(output_text)
+        else:
+            print('Prediction from trainer')
+            pred_proba = predictor.predict(test_dataset=tokenized_dataset[sample_set]).predictions[0]
+            output_ids = np.argmax(pred_proba, axis=2)
+            predicted_output = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)
+        return predicted_output
     
     def get_metrics(self, y_true, y_pred):
         cnt = 0

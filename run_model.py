@@ -79,7 +79,8 @@ training_args = {
                 'load_best_model_at_end': config.load_best_model_at_end,
                 'push_to_hub': config.push_to_hub,
                 'eval_accumulation_steps': config.eval_accumulation_steps,
-                'predict_with_generate': config.predict_with_generate, 
+                'predict_with_generate': config.predict_with_generate,
+                'loggins_steps': 1000000000, 
                 'use_mps_device': use_mps
             }
 
@@ -145,7 +146,7 @@ if config.mode != 'cli':
             loader.test_df_ood = loader.create_data_in_joint_task_format(loader.test_df_ood, 'term', 'polarity', 'raw_text', 'aspectTerms', bos_instruction_ood, eos_instruction)
 
     # Tokenize dataset
-    id_ds, id_tokenized_ds, ood_ds, ood_tokenized_ds = loader.set_data_for_training_semeval(t5_exp.tokenize_function_inputs)
+    id_ds, id_tokenized_ds, ood_ds, ood_tokenized_ds = loader.set_data_for_training_semeval(t5_exp.tokenize_function_inputs)    
 
     if config.mode == 'train':
         # Train model
@@ -156,6 +157,7 @@ if config.mode != 'cli':
         print('Model loaded from: ', model_checkpoint)
         if id_tokenized_ds.get("train") is not None:
             id_tr_pred_labels = t5_exp.get_labels(tokenized_dataset = id_tokenized_ds, sample_set = 'train', trained_model_path = model_out_path)
+            print(id_tr_pred_labels)
             id_tr_df = pd.DataFrame(id_ds['train'])[['text', 'labels']]
             id_tr_df['pred_labels'] = id_tr_pred_labels
             id_tr_df.to_csv(os.path.join(config.output_path, f'{config.experiment_name}_id_train.csv'), index=False)

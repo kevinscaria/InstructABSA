@@ -38,7 +38,7 @@ class InstructionsHandler:
         Now complete the following example-
         input: """
         
-        self.atsc['bos_instruct1'] = """Definition: The output will be 'positive' if the aspect identified in the sentence contains a positive sentiment. If the sentiment of the identified aspect in the input is negative the answer will be 'negative'. 
+        self.atsc['bos_instruct2'] = """Definition: The output will be 'positive' if the aspect identified in the sentence contains a positive sentiment. If the sentiment of the identified aspect in the input is negative the answer will be 'negative'. 
         Otherwise, the output should be 'neutral'. For aspects which are classified as noaspectterm, the sentiment is none.
         Positive example 1-
         input: With the great variety on the menu , I eat here often and never get bored. The aspect is menu.
@@ -48,8 +48,8 @@ class InstructionsHandler:
         output: positive
         Now complete the following example-
         input: """
-        self.atsc['delim_instruct'] = ''
-        self.atsc['eos_instruct'] = ''
+        self.atsc['delim_instruct'] = ' The aspect is '
+        self.atsc['eos_instruct'] = '.\noutput:'
 
         self.joint['bos_instruct1'] = """Definition: The output will be the aspects (both implicit and explicit) and the aspects sentiment polarity. In cases where there are no aspects the output should be noaspectterm:none.
         Positive example 1-
@@ -71,7 +71,7 @@ class InstructionsHandler:
         Now complete the following example-
         input: """
         self.joint['delim_instruct'] = ''
-        self.joint['eos_instruct'] = ''
+        self.joint['eos_instruct'] = ' \noutput:'
 
     def load_instruction_set2(self, ):
         self.ate['bos_instruct1'] = """Definition: The output will be the aspects (both implicit and explicit) which have an associated opinion that are extracted from the input text. In cases where there are no aspects the output should be noaspectterm.
@@ -143,7 +143,7 @@ class InstructionsHandler:
         Now complete the following example-
         input: """
         
-        self.atsc['bos_instruct1'] = """Definition: The output will be 'positive' if the aspect identified in the sentence contains a positive sentiment. If the sentiment of the identified aspect in the input is negative the answer will be 'negative'. 
+        self.atsc['bos_instruct2'] = """Definition: The output will be 'positive' if the aspect identified in the sentence contains a positive sentiment. If the sentiment of the identified aspect in the input is negative the answer will be 'negative'. 
         Otherwise, the output should be 'neutral'. For aspects which are classified as noaspectterm, the sentiment is none.
         Positive example 1-
         input: With the great variety on the menu , I eat here often and never get bored. The aspect is menu.

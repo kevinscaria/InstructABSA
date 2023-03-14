@@ -1,8 +1,9 @@
+import numpy as np
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import torch
 from torch.utils.data import DataLoader
 from torch.nn.utils.rnn import pad_sequence
 from tqdm import tqdm
-import numpy as np
 from transformers import (
     DataCollatorForSeq2Seq, AutoTokenizer, AutoModelForSeq2SeqLM, T5ForConditionalGeneration,
     Seq2SeqTrainingArguments, Trainer, Seq2SeqTrainer
@@ -55,7 +56,7 @@ class T5Generator:
         return trainer
 
 
-    def get_labels(self, tokenized_dataset, trained_model_path=None, predictor = None, batch_size = 4, sample_set = 'train'):
+    def get_labels(self, tokenized_dataset, predictor = None, batch_size = 4, sample_set = 'train'):
         """
         Get the predictions from the trained model.
         """
@@ -94,11 +95,12 @@ class T5Generator:
             total_gt+=len(gt_list)
             for gt_val in gt_list:
                 for pred_val in pred_list:
-                    if pred_val.strip().lower() == gt_val.strip().lower():
+                    if gt_val.lower() in pred_val.lower():
                         tp+=1
+                        break
         p = tp/total_pred
         r = tp/total_gt
-        return p, r, 2*p*r/(p+r) 
+        return p, r, 2*p*r/(p+r), None
 
 
 class T5Classifier:
@@ -106,6 +108,7 @@ class T5Classifier:
         self.tokenizer = AutoTokenizer.from_pretrained(model_checkpoint, force_download = True)
         self.model = T5ForConditionalGeneration.from_pretrained(model_checkpoint, force_download = True)
         self.data_collator = DataCollatorForSeq2Seq(self.tokenizer)
+        self.device = 'cuda' if torch.has_cuda else ('mps' if torch.has_mps else 'cpu')
 
     def tokenize_function_inputs(self, sample):
         """
@@ -163,7 +166,7 @@ class T5Classifier:
 
             for batch in tqdm(dataloader):
                 batch = batch.to(self.device)
-                output_ids = self.model.to.generate(batch)
+                output_ids = self.model.generate(batch)
                 output_texts = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)
                 for output_text in output_texts:
                     predicted_output.append(output_text)
@@ -175,8 +178,5 @@ class T5Classifier:
         return predicted_output
     
     def get_metrics(self, y_true, y_pred):
-        cnt = 0
-        for gt, pred in y_true, y_pred:
-            if gt == pred:
-                cnt+=1
-        return cnt/len(y_true)
+        return precision_score(y_true, y_pred, average='macro'), recall_score(y_true, y_pred, average='macro'), \
+            f1_score(y_true, y_pred, average='macro'), accuracy_score(y_true, y_pred)

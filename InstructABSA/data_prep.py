@@ -3,13 +3,11 @@ from datasets.dataset_dict import DatasetDict
 
 
 class DatasetLoader:
-    def __init__(self, train_df_id, test_df_id, train_df_ood=None, test_df_ood=None, sample_size = 1):
-        self.train_df_id = train_df_id.sample(frac = sample_size, random_state = 1999)
+    def __init__(self, train_df_id=None, test_df_id=None, train_df_ood=None, test_df_ood=None, sample_size = 1):
+        
+        self.train_df_id = train_df_id.sample(frac = sample_size, random_state = 1999) if train_df_id is not None else train_df_id
         self.test_df_id = test_df_id
-        if train_df_ood is not None:
-            self.train_df_ood = train_df_ood.sample(frac = sample_size, random_state = 1999)
-        else:
-            self.train_df_ood = train_df_ood
+        self.train_df_ood = train_df_ood.sample(frac = sample_size, random_state = 1999) if train_df_ood is not None else train_df_ood
         self.test_df_ood = test_df_ood
 
     def reconstruct_strings(self, df, col):
@@ -67,7 +65,7 @@ class DatasetLoader:
             df.iloc[0][aspect_col][0][key]
         except:
             df = self.reconstruct_strings(df, aspect_col)
-        df['labels'] = df[aspect_col].apply(lambda x: ', '.join([i[key] for i in x]))
+        df['labels'] = df[aspect_col].apply(lambda x: ','.join([i[key] for i in x]))
         df['text'] = df[text_col].apply(lambda x: bos_instruction + x + eos_instruction)
         return df
 
@@ -94,7 +92,7 @@ class DatasetLoader:
             df.iloc[0][aspect_col][0][key]
         except:
             df = self.reconstruct_strings(df, aspect_col)
-        df['labels'] = df[aspect_col].apply(lambda x: ', '.join([f"{i[key]}:{i[label_key]}" for i in x]))
+        df['labels'] = df[aspect_col].apply(lambda x: ','.join([f"{i[key]}:{i[label_key]}" for i in x]))
         df['text'] = df[text_col].apply(lambda x: bos_instruction + x + eos_instruction)
         return df
     
@@ -103,24 +101,31 @@ class DatasetLoader:
         Create the training and test dataset as huggingface datasets format.
         """
         # Define train and test sets
-        if self.test_df_id is None:
+        if (self.train_df_id is not None) and (self.test_df_id is None):
             indomain_dataset = DatasetDict({'train': Dataset.from_pandas(self.train_df_id)})
-        else:
+            indomain_tokenized_datasets = indomain_dataset.map(tokenize_function, batched=True)
+        elif(self.train_df_id is None) and (self.test_df_id is not None):
+            indomain_dataset = DatasetDict({'test': Dataset.from_pandas(self.train_df_id)})
+            indomain_tokenized_datasets = indomain_dataset.map(tokenize_function, batched=True)
+        elif (self.train_df_id is not None) and (self.test_df_id is not None):
             indomain_dataset = DatasetDict({'train': Dataset.from_pandas(self.train_df_id), 'test': Dataset.from_pandas(self.test_df_id)})
-        indomain_tokenized_datasets = indomain_dataset.map(tokenize_function, batched=True)
+            indomain_tokenized_datasets = indomain_dataset.map(tokenize_function, batched=True)
+        else:
+            indomain_dataset = {}
+            indomain_tokenized_datasets = {}
 
         if (self.train_df_ood is not None) and (self.test_df_ood is None):
-            other_domain_dataset = DatasetDict({'train': Dataset.from_pandas(self.train_df_id)})
+            other_domain_dataset = DatasetDict({'train': Dataset.from_pandas(self.train_df_ood)})
             other_domain_tokenized_dataset = other_domain_dataset.map(tokenize_function, batched=True)
         elif (self.train_df_ood is None) and (self.test_df_ood is not None):
-            other_domain_dataset = DatasetDict({'test': Dataset.from_pandas(self.train_df_id)})
+            other_domain_dataset = DatasetDict({'test': Dataset.from_pandas(self.test_df_ood)})
             other_domain_tokenized_dataset = other_domain_dataset.map(tokenize_function, batched=True)
         elif (self.train_df_ood is not None) and (self.test_df_ood is not None):
             other_domain_dataset = DatasetDict({'train': Dataset.from_pandas(self.train_df_ood), 'test': Dataset.from_pandas(self.test_df_ood)})
             other_domain_tokenized_dataset = other_domain_dataset.map(tokenize_function, batched=True)
         else:
-            other_domain_dataset = None
-            other_domain_tokenized_dataset = None
+            other_domain_dataset = {}
+            other_domain_tokenized_dataset = {}
         
         return indomain_dataset, indomain_tokenized_datasets, other_domain_dataset, other_domain_tokenized_dataset
         

@@ -95,7 +95,7 @@ class T5Generator:
             total_gt+=len(gt_list)
             for gt_val in gt_list:
                 for pred_val in pred_list:
-                    if gt_val.lower() in pred_val.lower():
+                    if pred_val.lower() in gt_val.lower() or gt_val.lower() in pred_val.lower():
                         tp+=1
                         break
         p = tp/total_pred

@@ -105,7 +105,7 @@ class DatasetLoader:
             indomain_dataset = DatasetDict({'train': Dataset.from_pandas(self.train_df_id)})
             indomain_tokenized_datasets = indomain_dataset.map(tokenize_function, batched=True)
         elif(self.train_df_id is None) and (self.test_df_id is not None):
-            indomain_dataset = DatasetDict({'test': Dataset.from_pandas(self.train_df_id)})
+            indomain_dataset = DatasetDict({'test': Dataset.from_pandas(self.test_df_id)})
             indomain_tokenized_datasets = indomain_dataset.map(tokenize_function, batched=True)
         elif (self.train_df_id is not None) and (self.test_df_id is not None):
             indomain_dataset = DatasetDict({'train': Dataset.from_pandas(self.train_df_id), 'test': Dataset.from_pandas(self.test_df_id)})

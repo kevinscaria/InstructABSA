@@ -84,7 +84,8 @@ training_args = {
             }
 
 # Create T5 model object
-if config.set_instruction_key:
+print(config.set_instruction_key)
+if config.set_instruction_key == 1:
     indomain = 'bos_instruct1'
     outdomain = 'bos_instruct2'
 else:

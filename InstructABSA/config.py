@@ -53,7 +53,7 @@ class Config(object):
         parser.add_argument('-output_dir', type=str)
         parser.add_argument('-id_tr_data_path', type=str)
         parser.add_argument('-id_te_data_path', type=str)
-        parser.add_argument('-set_instruction_key', type=bool, default=True)
+        parser.add_argument('-set_instruction_key', type=int, default=1)
         parser.add_argument('-ood_tr_data_path', type=str)
         parser.add_argument('-ood_te_data_path', type=str)
         parser.add_argument('-output_path', type=str)

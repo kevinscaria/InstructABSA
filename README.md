@@ -21,9 +21,9 @@ An example dataset is shown below and also in the [Datasets]() folder.
 All the model weights can be found [here](). The best performing models for each ABSA subtask based on our experiments are presented in the table below:
 | Task  | Model Name | Dataset Trained | Model Type | Instruction Configuration |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
-| ATE| /ate_tk-instruct-base-def-pos-neg-neut-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-2 | Definition + 2 pos + 2 neg + 2 neut examples |
-| ATSC| /atsc_tk-instruct-base-def-pos-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-1 | Definition + 2 pos examples |
-| Joint Task| /joint_tk-instruct-base-def-pos-neg-neut-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-2 | Definition + 2 pos + 2 neg + 2 neut examples |
+| ATE| ./ate_tk-instruct-base-def-pos-neg-neut-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-2 | Definition + 2 pos + 2 neg + 2 neut examples |
+| ATSC| ./atsc_tk-instruct-base-def-pos-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-1 | Definition + 2 pos examples |
+| Joint Task| ./joint_tk-instruct-base-def-pos-neg-neut-combined | SemEval 2014 Laptops + Restaurants | InstructABSA-2 | Definition + 2 pos + 2 neg + 2 neut examples |
 
 ### A sample inference notebook is found [here]().
 

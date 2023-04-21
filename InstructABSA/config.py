@@ -31,6 +31,7 @@ class Config(object):
         self.push_to_hub = False
         self.eval_accumulation_steps = 1
         self.predict_with_generate = True
+        self.max_token_length = 128
         self.bos_instruction = None
         self.delim_instruction = None
         self.eos_instruction = None
@@ -67,6 +68,7 @@ class Config(object):
         parser.add_argument('-warmup_ratio', help='Warmup Ratio', default=0.1, type=float)
         parser.add_argument('-save_strategy', help='no/epoch/steps', default='no', type=str)
         parser.add_argument('-eval_accumulation_steps', help='Eval gradient accumulation steps', default=1, type=int)
-        parser.add_argument('-predict_with_generate', help='PRedict with generate', default=True, type=bool)
+        parser.add_argument('-predict_with_generate', help='Predict with generate', default=True, type=bool)
+        parser.add_argument('-max_token_length', help='Sets maximum token output length', default=128, type=bool)
         parser.add_argument('-test_input', help='The input review to test', type=str)
         return parser

@@ -156,7 +156,9 @@ if config.mode != 'cli':
         # Get prediction labels
         print('Model loaded from: ', model_checkpoint)
         if id_tokenized_ds.get("train") is not None:
-            id_tr_pred_labels = t5_exp.get_labels(tokenized_dataset = id_tokenized_ds, sample_set = 'train', batch_size=config.per_device_eval_batch_size)
+            id_tr_pred_labels = t5_exp.get_labels(tokenized_dataset = id_tokenized_ds, sample_set = 'train', 
+                                                  batch_size=config.per_device_eval_batch_size, 
+                                                  max_length = config.max_token_length)
             id_tr_df = pd.DataFrame(id_ds['train'])[['text', 'labels']]
             id_tr_df['labels'] = id_tr_df['labels'].apply(lambda x: x.strip())
             id_tr_df['pred_labels'] = id_tr_pred_labels
@@ -171,7 +173,9 @@ if config.mode != 'cli':
 
 
         if id_tokenized_ds.get("test") is not None:
-            id_te_pred_labels = t5_exp.get_labels(tokenized_dataset = id_tokenized_ds, sample_set = 'test', batch_size=config.per_device_eval_batch_size)
+            id_te_pred_labels = t5_exp.get_labels(tokenized_dataset = id_tokenized_ds, sample_set = 'test', 
+                                                  batch_size=config.per_device_eval_batch_size, 
+                                                  max_length = config.max_token_length)
             id_te_df = pd.DataFrame(id_ds['test'])[['text', 'labels']]
             id_te_df['labels'] = id_te_df['labels'].apply(lambda x: x.strip())
             id_te_df['pred_labels'] = id_te_pred_labels
@@ -185,7 +189,9 @@ if config.mode != 'cli':
                 print('Accuracy: ', accuracy)
 
         if ood_tokenized_ds.get("train") is not None:
-            ood_tr_pred_labels = t5_exp.get_labels(tokenized_dataset = ood_tokenized_ds, sample_set = 'train', batch_size=config.per_device_eval_batch_size)
+            ood_tr_pred_labels = t5_exp.get_labels(tokenized_dataset = ood_tokenized_ds, sample_set = 'train', 
+                                                   batch_size=config.per_device_eval_batch_size, 
+                                                   max_length = config.max_token_length)
             ood_tr_df = pd.DataFrame(ood_ds['train'])[['text', 'labels']]
             ood_tr_df['labels'] = ood_tr_df['labels'].apply(lambda x: x.strip())
             ood_tr_df['pred_labels'] = ood_tr_pred_labels
@@ -199,7 +205,9 @@ if config.mode != 'cli':
                 print('Accuracy: ', accuracy)
             
         if ood_tokenized_ds.get("test") is not None:
-            ood_te_pred_labels = t5_exp.get_labels(tokenized_dataset = ood_tokenized_ds, sample_set = 'test', batch_size=config.per_device_eval_batch_size)
+            ood_te_pred_labels = t5_exp.get_labels(tokenized_dataset = ood_tokenized_ds, sample_set = 'test', 
+                                                   batch_size=config.per_device_eval_batch_size, 
+                                                   max_length = config.max_token_length)
             ood_te_df = pd.DataFrame(ood_ds['test'])[['text', 'labels']]
             ood_te_df['labels'] = ood_te_df['labels'].apply(lambda x: x.strip())
             ood_te_df['pred_labels'] = ood_te_pred_labels
@@ -219,5 +227,5 @@ else:
     else:
         model_input = bos_instruction_id + config.test_input + eos_instruction
     input_ids = t5_exp.tokenizer(model_input, return_tensors="pt").input_ids
-    outputs = t5_exp.model.generate(input_ids)
+    outputs = t5_exp.model.generate(input_ids, max_length = config.max_token_length)
     print('Model output: ', t5_exp.tokenizer.decode(outputs[0], skip_special_tokens=True))

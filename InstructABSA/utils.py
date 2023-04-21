@@ -56,32 +56,26 @@ class T5Generator:
         return trainer
 
 
-    def get_labels(self, tokenized_dataset, predictor = None, batch_size = 4, sample_set = 'train'):
+    def get_labels(self, tokenized_dataset, batch_size = 4, max_length = 128, sample_set = 'train'):
         """
         Get the predictions from the trained model.
         """
-        if not predictor:
-            print('Prediction from checkpoint')
-            def collate_fn(batch):
-                input_ids = [torch.tensor(example['input_ids']) for example in batch]
-                input_ids = pad_sequence(input_ids, batch_first=True, padding_value=self.tokenizer.pad_token_id)
-                return input_ids
-            
-            dataloader = DataLoader(tokenized_dataset[sample_set], batch_size=batch_size, collate_fn=collate_fn)
-            predicted_output = []
-            self.model.to(self.device)
-            print('Model loaded to: ', self.device)
+        def collate_fn(batch):
+            input_ids = [torch.tensor(example['input_ids']) for example in batch]
+            input_ids = pad_sequence(input_ids, batch_first=True, padding_value=self.tokenizer.pad_token_id)
+            return input_ids
+        
+        dataloader = DataLoader(tokenized_dataset[sample_set], batch_size=batch_size, collate_fn=collate_fn)
+        predicted_output = []
+        self.model.to(self.device)
+        print('Model loaded to: ', self.device)
 
-            for batch in tqdm(dataloader):
-                batch = batch.to(self.device)
-                output_ids = self.model.generate(batch)
-                output_texts = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)
-                for output_text in output_texts:
-                    predicted_output.append(output_text)
-        else:
-            print('Prediction from trainer')
-            output_ids = predictor.predict(test_dataset=tokenized_dataset[sample_set]).predictions
-            predicted_output = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)
+        for batch in tqdm(dataloader):
+            batch = batch.to(self.device)
+            output_ids = self.model.generate(batch, max_length = max_length)
+            output_texts = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)
+            for output_text in output_texts:
+                predicted_output.append(output_text)
         return predicted_output
     
     def get_metrics(self, y_true, y_pred):
@@ -95,7 +89,7 @@ class T5Generator:
             total_gt+=len(gt_list)
             for gt_val in gt_list:
                 for pred_val in pred_list:
-                    if pred_val.lower() in gt_val.lower() or gt_val.lower() in pred_val.lower():
+                    if pred_val.lower() == gt_val.lower() or gt_val.lower() == pred_val.lower():
                         tp+=1
                         break
         p = tp/total_pred
@@ -148,33 +142,27 @@ class T5Classifier:
         trainer.save_model()
         return trainer
 
-    def get_labels(self, tokenized_dataset, predictor = None, batch_size = 4, sample_set = 'train'):
+    def get_labels(self, tokenized_dataset, batch_size = 4, sample_set = 'train'):
         """
         Get the predictions from the trained model.
         """
-        if not predictor:
-            print('Prediction from checkpoint')
-            def collate_fn(batch):
-                input_ids = [torch.tensor(example['input_ids']) for example in batch]
-                input_ids = pad_sequence(input_ids, batch_first=True, padding_value=self.tokenizer.pad_token_id)
-                return input_ids
-            
-            dataloader = DataLoader(tokenized_dataset[sample_set], batch_size=batch_size, collate_fn=collate_fn)
-            predicted_output = []
-            self.model.to(self.device)
-            print('Model loaded to: ', self.device)
+        print('Prediction from checkpoint')
+        def collate_fn(batch):
+            input_ids = [torch.tensor(example['input_ids']) for example in batch]
+            input_ids = pad_sequence(input_ids, batch_first=True, padding_value=self.tokenizer.pad_token_id)
+            return input_ids
+        
+        dataloader = DataLoader(tokenized_dataset[sample_set], batch_size=batch_size, collate_fn=collate_fn)
+        predicted_output = []
+        self.model.to(self.device)
+        print('Model loaded to: ', self.device)
 
-            for batch in tqdm(dataloader):
-                batch = batch.to(self.device)
-                output_ids = self.model.generate(batch)
-                output_texts = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)
-                for output_text in output_texts:
-                    predicted_output.append(output_text)
-        else:
-            print('Prediction from trainer')
-            pred_proba = predictor.predict(test_dataset=tokenized_dataset[sample_set]).predictions[0]
-            output_ids = np.argmax(pred_proba, axis=2)
-            predicted_output = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)
+        for batch in tqdm(dataloader):
+            batch = batch.to(self.device)
+            output_ids = self.model.generate(batch)
+            output_texts = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)
+            for output_text in output_texts:
+                predicted_output.append(output_text)
         return predicted_output
     
     def get_metrics(self, y_true, y_pred):

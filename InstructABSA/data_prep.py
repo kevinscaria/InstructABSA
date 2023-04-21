@@ -20,11 +20,12 @@ class DatasetLoader:
                 text = text.replace('[', '').replace(']', '').replace('{', '').replace('}', '').split(", '")
                 req_list = []
                 for idx, pair in enumerate(text):
+                    splitter = ': ' if ': ' in pair else ':'
                     if idx%2==0:
-                        reconstructed_dict = {}
-                        reconstructed_dict[pair.split(':')[0].replace("'", '')] = pair.split(':')[1].replace("'", '')
+                        reconstructed_dict = {} 
+                        reconstructed_dict[pair.split(splitter)[0].replace("'", '')] = pair.split(splitter)[1].replace("'", '')
                     else:
-                        reconstructed_dict[pair.split(':')[0].replace("'", '')] = pair.split(':')[1].replace("'", '')
+                        reconstructed_dict[pair.split(splitter)[0].replace("'", '')] = pair.split(splitter)[1].replace("'", '')
                         req_list.append(reconstructed_dict)
             else:
                 req_list = text
@@ -65,7 +66,7 @@ class DatasetLoader:
             df.iloc[0][aspect_col][0][key]
         except:
             df = self.reconstruct_strings(df, aspect_col)
-        df['labels'] = df[aspect_col].apply(lambda x: ','.join([i[key] for i in x]))
+        df['labels'] = df[aspect_col].apply(lambda x: ', '.join([i[key] for i in x]))
         df['text'] = df[text_col].apply(lambda x: bos_instruction + x + eos_instruction)
         return df
 
@@ -92,7 +93,7 @@ class DatasetLoader:
             df.iloc[0][aspect_col][0][key]
         except:
             df = self.reconstruct_strings(df, aspect_col)
-        df['labels'] = df[aspect_col].apply(lambda x: ','.join([f"{i[key]}:{i[label_key]}" for i in x]))
+        df['labels'] = df[aspect_col].apply(lambda x: ', '.join([f"{i[key]}:{i[label_key]}" for i in x]))
         df['text'] = df[text_col].apply(lambda x: bos_instruction + x + eos_instruction)
         return df
     

@@ -41,6 +41,8 @@ All the model weights can be found [here](https://huggingface.co/kevinscaria). T
 
 The ATE models can be trained from scratch or alternatively can be used to run inference on your datasets directly. This can be done through CLI (check the [Scripts](https://github.com/kevinscaria/InstructABSA/tree/main/Scripts) folder) or by adapting your code similar to run_model.py. An example shell command to run inference on individual samples is shown below.
 
+A sample notebook for training and evluating ATE can be found [here](https://github.com/kevinscaria/InstructABSA/blob/main/ATE_Training_&_Inference.ipynb).
+
 To evaluate the ATE subtask on a single input using CLI run the following:
 ```shell
 python run_model.py -mode cli -task ate \
@@ -64,6 +66,8 @@ Note the ```|``` delimiter that is used to pass the aspect term for which the po
 ## Joint Tasks
 
 The Joint task models can be trained from scratch or alternatively can be used to run inference on your datasets directly. This can be done through CLI (check the [Scripts](https://github.com/kevinscaria/InstructABSA/tree/main/Scripts) folder) or by adapting your code similar to run_model.py. An example shell command to run inference on individual samples is shown below.
+
+A sample notebook for training and evluating Joint Task can be found [here](https://github.com/kevinscaria/InstructABSA/blob/main/JointTask_Training_&_Inference.ipynb).
 
 To evaluate the Joint Task on a single input using CLI run the following:
 ```shell

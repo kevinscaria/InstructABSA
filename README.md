@@ -2,6 +2,9 @@
 
 > **Note**
 > New feature coming
+* We will be adding LoRA and PTuning based finetuning methods for parameter efficient finetuning
+* We will be updating the task list to add 3 new tasks viz. aspect based opinion extraction (ABPE), aspect opinion pair extraction (AOPE) and aspect opinion sentiment triplet extraction (AOSTE).
+
 
 
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/instructabsa-instruction-learning-for-aspect/aspect-extraction-on-semeval-2014-task-4-sub-2)](https://paperswithcode.com/sota/aspect-extraction-on-semeval-2014-task-4-sub-2?p=instructabsa-instruction-learning-for-aspect)

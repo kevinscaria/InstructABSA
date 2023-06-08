@@ -3,6 +3,7 @@
 ## 💥 New Features Coming
 - We will be adding LoRA and PTuning based finetuning methods for parameter efficient finetuning.
 - We will be updating the task list to add 3 new tasks viz. aspect based opinion extraction (ABPE), aspect opinion pair extraction (AOPE) and aspect opinion sentiment triplet extraction (AOSTE).
+- Revisions to paper to include more systematic ablation studies.
 
 ## Introduction
 

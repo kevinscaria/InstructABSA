@@ -80,4 +80,8 @@ python run_model.py -mode cli -task joint \
 -model_checkpoint kevinscaria/joint_tk-instruct-base-def-pos-neg-neut-combined \
 -test_input 'The cab ride was amazing but the service was pricey'
 ```
+## Aspect Based Opinion Extraction ⬆️
 
+## Aspect Opinion Pair Extraction ⬆️
+
+## Aspect Opinion Sentiment Triplet Extraction ⬆️

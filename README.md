@@ -1,8 +1,14 @@
 # InstructABSA: Instruction learning for Aspect Based Sentiment Classification
 
-> **New feature coming**
-> We will be adding LoRA and PTuning based finetuning methods for parameter efficient finetuning
-> We will be updating the task list to add 3 new tasks viz. aspect based opinion extraction (ABPE), aspect opinion pair extraction (AOPE) and aspect opinion sentiment triplet extraction (AOSTE).
+## 💥 New Features Coming
+
+<hr/>
+
+### 🔴 USE `stable` not `master` 🔴
+
+**Download the latest `stable` release from here: https://github.com/Significant-Gravitas/Auto-GPT/releases/latest.**
+- We will be adding LoRA and PTuning based finetuning methods for parameter efficient finetuning
+- We will be updating the task list to add 3 new tasks viz. aspect based opinion extraction (ABPE), aspect opinion pair extraction (AOPE) and aspect opinion sentiment triplet extraction (AOSTE).
 
 
 

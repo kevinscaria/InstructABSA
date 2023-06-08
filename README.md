@@ -1,9 +1,8 @@
 # InstructABSA: Instruction learning for Aspect Based Sentiment Classification
 
-> **Note**
-> New feature coming
-* We will be adding LoRA and PTuning based finetuning methods for parameter efficient finetuning
-* We will be updating the task list to add 3 new tasks viz. aspect based opinion extraction (ABPE), aspect opinion pair extraction (AOPE) and aspect opinion sentiment triplet extraction (AOSTE).
+> **New feature coming**
+> We will be adding LoRA and PTuning based finetuning methods for parameter efficient finetuning
+> We will be updating the task list to add 3 new tasks viz. aspect based opinion extraction (ABPE), aspect opinion pair extraction (AOPE) and aspect opinion sentiment triplet extraction (AOSTE).
 
 
 

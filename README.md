@@ -85,3 +85,16 @@ python run_model.py -mode cli -task joint \
 ## Aspect Opinion Pair Extraction ⬆️
 
 ## Aspect Opinion Sentiment Triplet Extraction ⬆️
+
+## BibTeX Entry and Citation Info
+
+If you find our work useful, please cite our work: 
+
+```bibtex
+article{scaria2023instructabsa,
+  title={InstructABSA: Instruction Learning for Aspect Based Sentiment Analysis},
+  author={Scaria, Kevin and Gupta, Himanshu and Sawant, Saurabh Arjun and Mishra, Swaroop and Baral, Chitta},
+  journal={arXiv preprint arXiv:2302.08624},
+  year={2023}
+}
+```

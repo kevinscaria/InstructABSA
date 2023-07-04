@@ -1,5 +1,7 @@
 .DS_Store
 *.pyc
+*.ipynb
+*.gdoc
 .png
 Paper
 Models

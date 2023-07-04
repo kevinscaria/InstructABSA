@@ -83,7 +83,7 @@ class InstructionsHandler:
         self.aspe['delim_instruct'] = ''
         self.aspe['eos_instruct'] = ' \noutput:'
 
-        ################################# AOOE - CURRENT #################################
+        ################################# AOOE #################################
 
         self.aooe['bos_instruct1'] = """Definition: The output will be the opinion/describing word of the aspect terms in the sentence. In cases where there are no aspects the output should be none.
         Positive example 1-
@@ -109,27 +109,29 @@ class InstructionsHandler:
 
         ################################# AOPE #################################
 
-        self.aope['bos_instruct1'] = """Definition: The output will be the aspects (both implicit and explicit) and the aspects sentiment polarity. In cases where there are no aspects the output should be noaspectterm:none.
+        self.aope['bos_instruct1'] = """Definition: The output will be the aspects (both implicit and explicit) and the corresponding opinion/describing terms. In cases where there are no aspects the output should be noaspectterm:none.
         Positive example 1-
         input: I charge it at night and skip taking the cord with me because of the good battery life.
-        output: battery life:positive, 
+        output: battery life:good 
         Positive example 2-
         input: it is of high quality , has a killer GUI , is extremely stable , is highly expandable , is bundled with lots of very good applications , is easy to use , and is absolutely gorgeous.
-        output: quality:high, GUI:killer, 
+        output: quality:high, GUI:killer, applications:good, use:easy 
         Now complete the following example-
         input: """
         
         self.aope['bos_instruct2'] = """Definition: The output will be the aspects (both implicit and explicit) and the aspects sentiment polarity. In cases where there are no aspects the output should be noaspectterm:none.
         Positive example 1-
-        input: With the great variety on the menu , I eat here often and never get bored.
-        output: menu:positive
+        input: Faan 's got a great concept but a little rough on the delivery .
+        output: delivery:rough
         Positive example 2- 
-        input: Great food, good size menu, great service and an unpretensious setting.
-        output: food:positive, menu:positive, service:positive, setting:positive
+        input: I just wonder how you can have such a delicious meal for such little money .
+        output: meal:delicious, money:little
         Now complete the following example-
         input: """
         self.aope['delim_instruct'] = ''
         self.aope['eos_instruct'] = ' \noutput:'
+
+        ################################# AOSTE #################################
 
         self.aoste['bos_instruct1'] = """Definition: The output will be the aspects (both implicit and explicit) and the aspects sentiment polarity. In cases where there are no aspects the output should be noaspectterm:none.
         Positive example 1-
@@ -302,7 +304,7 @@ class InstructionsHandler:
         self.aspe['delim_instruct'] = ''
         self.aspe['eos_instruct'] = ' \noutput:'
 
-        ################################# AOOE - Current #################################
+        ################################# AOOE #################################
 
         self.aooe['bos_instruct1'] = """Definition: The output will be the opinion/describing word of the aspect terms in the sentence. In cases where there are no aspects the output should be none.
         Positive example 1-
@@ -349,3 +351,51 @@ class InstructionsHandler:
         input: """
         self.aooe['delim_instruct'] = ' The aspect is '
         self.aooe['eos_instruct'] = '.\noutput:'
+
+        ################################# AOPE #################################
+
+        self.aope['bos_instruct1'] = """Definition: The output will be the aspects (both implicit and explicit) and the corresponding opinion/describing terms. In cases where there are no aspects the output should be noaspectterm:none.
+        Positive example 1-
+        input: I charge it at night and skip taking the cord with me because of the good battery life.
+        output: battery life:good 
+        Positive example 2-
+        input: it is of high quality , has a killer GUI , is extremely stable , is highly expandable , is bundled with lots of very good applications , is easy to use , and is absolutely gorgeous.
+        output: quality:high, GUI:killer, applications:good, use:easy
+        Negative example 1-
+        input: A month or so ago , the freaking motherboard just died .
+        output: motherboard:freaking, motherboard:freaking
+        Negative example 2-
+        input: I had always used PCs and been constantly frustrated by the crashing and the poorly designed operating systems that were never very intuitive .
+        output: operating systems:poorly designed, operating systems:intuitive
+        Neutral example 1-
+        input: It has a 10 hour battery life when you 're doing web browsing and word editing , making it perfect for the classroom or office , and in terms of gaming and movie playing it 'll have a battery life of just over 5 hours .
+        output: web browsing:perfect, word editing:perfect
+        Neutral example 2-
+        input: no complaints with their desktop , and maybe because it just sits on your desktop , and you do n't carry it around , which could jar the hard drive , or the motherboard .
+        output: hard drive:jar, motherboard:jar
+        Now complete the following example-
+        input: """
+        
+        self.aope['bos_instruct2'] = """Definition: The output will be the aspects (both implicit and explicit) and the aspects sentiment polarity. In cases where there are no aspects the output should be noaspectterm:none.
+        Positive example 1-
+        input: Faan 's got a great concept but a little rough on the delivery .
+        output: delivery:rough
+        Positive example 2- 
+        input: I just wonder how you can have such a delicious meal for such little money .
+        output: meal:delicious, money:little
+        Negative example 1-
+        input: From the terrible service , to the bland food , not to mention the unaccommodating managers , the overall experience was horrible .
+        output: service:terrible, food:bland, managers:unaccommodating
+        Negative example 2- 
+        input: I had the Pad Thai and the noodles were sticky .
+        output: Pad Thai:sticky, noodles:sticky
+        Neutral example 1-
+        input: The Dim Sum was so-so , but not spectacular .
+        output: Dim Sum:so-so, Dim Sum:not spectacular
+        Neutral example 2- 
+        input: The location and ambience is Ok but the food is what makes up for it .
+        output: mlocationeal:Ok, ambience:Ok
+        Now complete the following example-
+        input: """
+        self.aope['delim_instruct'] = ''
+        self.aope['eos_instruct'] = ' \noutput:'

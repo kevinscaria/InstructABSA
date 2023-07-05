@@ -133,23 +133,23 @@ class InstructionsHandler:
 
         ################################# AOSTE #################################
 
-        self.aoste['bos_instruct1'] = """Definition: The output will be the aspects (both implicit and explicit) and the aspects sentiment polarity. In cases where there are no aspects the output should be noaspectterm:none.
+        self.aoste['bos_instruct1'] = """Definition: The output will be the aspects (both implicit and explicit) the corresponding opinion/describing terms and the sentiment polarity (positive, negative, neutral) of the opinion term . In cases where there are no aspects the output should be noaspectterm:none:none.
         Positive example 1-
         input: I charge it at night and skip taking the cord with me because of the good battery life.
-        output: battery life:positive, 
+        output: battery life:good:positive 
         Positive example 2-
-        input: I even got my teenage son one, because of the features that it offers, like, iChat, Photobooth, garage band and more!.
-        output: features:positive, iChat:positive, Photobooth:positive, garage band:positive
+        input: it is of high quality , has a killer GUI , is extremely stable , is highly expandable , is bundled with lots of very good applications , is easy to use , and is absolutely gorgeous.
+        output: quality:high:positive, GUI:killer:positive, applications:good:positive, use:easy:positive 
         Now complete the following example-
         input: """
         
-        self.aoste['bos_instruct2'] = """Definition: The output will be the aspects (both implicit and explicit) and the aspects sentiment polarity. In cases where there are no aspects the output should be noaspectterm:none.
+        self.aoste['bos_instruct2'] = """Definition: The output will be the aspects (both implicit and explicit) the corresponding opinion/describing terms and the sentiment polarity (positive, negative, neutral) of the opinion term . In cases where there are no aspects the output should be noaspectterm:none:none.
         Positive example 1-
-        input: With the great variety on the menu , I eat here often and never get bored.
-        output: menu:positive
+        input: Faan 's got a great concept but a little rough on the delivery .
+        output: delivery:rough:positive
         Positive example 2- 
-        input: Great food, good size menu, great service and an unpretensious setting.
-        output: food:positive, menu:positive, service:positive, setting:positive
+        input: I just wonder how you can have such a delicious meal for such little money .
+        output: meal:delicious:positive, money:little:positive
         Now complete the following example-
         input: """
         self.aoste['delim_instruct'] = ''
@@ -399,3 +399,51 @@ class InstructionsHandler:
         input: """
         self.aope['delim_instruct'] = ''
         self.aope['eos_instruct'] = ' \noutput:'
+
+        ################################# AOSTE #################################
+
+        self.aoste['bos_instruct1'] = """Definition: The output will be the aspects (both implicit and explicit) the corresponding opinion/describing terms and the sentiment polarity (positive, negative, neutral) of the opinion term . In cases where there are no aspects the output should be noaspectterm:none:none.
+        Positive example 1-
+        input: I charge it at night and skip taking the cord with me because of the good battery life.
+        output: battery life:good:positive 
+        Positive example 2-
+        input: it is of high quality , has a killer GUI , is extremely stable , is highly expandable , is bundled with lots of very good applications , is easy to use , and is absolutely gorgeous.
+        output: quality:high:positive, GUI:killer:positive, applications:good:positive, use:easy:positive
+        Negative example 1-
+        input: A month or so ago , the freaking motherboard just died .
+        output: motherboard:freaking:negative, motherboard:freaking:negative
+        Negative example 2-
+        input: I had always used PCs and been constantly frustrated by the crashing and the poorly designed operating systems that were never very intuitive .
+        output: operating systems:poorly designed, operating systems:intuitive
+        Neutral example 1-
+        input: It has a 10 hour battery life when you 're doing web browsing and word editing , making it perfect for the classroom or office , and in terms of gaming and movie playing it 'll have a battery life of just over 5 hours .
+        output: web browsing:perfect:neutral, word editing:perfect:neutral
+        Neutral example 2-
+        input: no complaints with their desktop , and maybe because it just sits on your desktop , and you do n't carry it around , which could jar the hard drive , or the motherboard .
+        output: hard drive:jar:neutral, motherboard:jar:neutral
+        Now complete the following example-
+        input: """
+        
+        self.aoste['bos_instruct2'] = """Definition: The output will be the aspects (both implicit and explicit) the corresponding opinion/describing terms and the sentiment polarity (positive, negative, neutral) of the opinion term . In cases where there are no aspects the output should be noaspectterm:none:none.
+        Positive example 1-
+        input: Faan 's got a great concept but a little rough on the delivery .
+        output: delivery:rough:positive
+        Positive example 2- 
+        input: I just wonder how you can have such a delicious meal for such little money .
+        output: meal:delicious:positive, money:little:positive
+        Negative example 1-
+        input: From the terrible service , to the bland food , not to mention the unaccommodating managers , the overall experience was horrible .
+        output: service:terrible:negative, food:bland:negative, managers:unaccommodating:negative
+        Negative example 2- 
+        input: I had the Pad Thai and the noodles were sticky .
+        output: Pad Thai:sticky:negative, noodles:sticky:negative
+        Neutral example 1-
+        input: The Dim Sum was so-so , but not spectacular .
+        output: Dim Sum:so-so:neutral, Dim Sum:not spectacular:neutral
+        Neutral example 2- 
+        input: The location and ambience is Ok but the food is what makes up for it .
+        output: mlocationeal:Ok:neutral, ambience:Ok:neutral
+        Now complete the following example-
+        input: """
+        self.aoste['delim_instruct'] = ''
+        self.aoste['eos_instruct'] = ' \noutput:'

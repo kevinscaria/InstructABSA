@@ -1,4 +1,4 @@
-# InstructABSA: Instruction learning for Aspect Based Sentiment Classification
+# InstructABSA: Instruction learning for Aspect Based Sentiment Classification [NAACL - 2024]
 
 ## 💥 New Features Coming
 - We will be adding LoRA and PTuning based finetuning methods for parameter efficient finetuning.
